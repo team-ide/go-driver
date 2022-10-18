@@ -1,4 +1,4 @@
-module job-engine
+module github.com/team-ide/go-driver
 
 go 1.18
 
@@ -11,9 +11,9 @@ require (
 	gitee.com/chunanyong/zorm v1.6.1
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/godror/godror v0.34.0
+	github.com/lib/pq v1.10.7
 	github.com/mattn/go-sqlite3 v1.14.15
 	go-aci v0.0.0-00010101000000-000000000000
-	kingbase.com/gokb v0.0.0-00010101000000-000000000000
 )
 
 require (
