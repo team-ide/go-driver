@@ -1,0 +1,9 @@
+aciDir=/xxx
+includedir=${aciDir}/include/
+libdir=${aciDir}/lib
+
+Name: aci
+Description: ShenTong Database Client
+Version: 7.0.8
+Cflags: -I${includedir}
+Libs: -L${libdir} -laci
