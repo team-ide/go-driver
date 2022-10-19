@@ -3,12 +3,16 @@ package db_kingbase
 import (
 	"fmt"
 	"gitee.com/chunanyong/zorm"
-	_ "github.com/lib/pq"
-	//_ "kingbase.com/gokb"
+	//_ "github.com/lib/pq"
+	_ "kingbase.com/gokb"
 )
 
 func NewDataSourceConfig(user string, password string, host string, port int, database string) zorm.DataSourceConfig {
-	connStr := fmt.Sprintf("user='%s' password='%s' host=%s port=%d dbname=%s sslmode=disable", user, password, host, port, database)
+	connStr := fmt.Sprintf("user='%s' password='%s' host=%s port=%d", user, password, host, port)
+	if database != "" {
+		connStr += " dbname=" + database
+	}
+	connStr += " sslmode=disable"
 	//connStr := fmt.Sprintf("kingbase://%s:%s@%s:%d/%s?sslmode=disable", user, password, host, port, database)
 
 	dbDaoConfig := zorm.DataSourceConfig{

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"gitee.com/chunanyong/zorm"
+	"github.com/team-ide/go-driver/db_dm"
 	"github.com/team-ide/go-driver/db_kingbase"
 	"github.com/team-ide/go-driver/db_mysql"
 	"github.com/team-ide/go-driver/db_oracle"
@@ -28,6 +29,11 @@ func TestOracle(t *testing.T) {
 
 func TestKingBase(t *testing.T) {
 	dbConfig := db_kingbase.NewDataSourceConfig("root", "123456", "127.0.0.1", 54321, "")
+	testConfig(dbConfig, `SELECT 1`)
+}
+
+func TestDm(t *testing.T) {
+	dbConfig := db_dm.NewDataSourceConfig("root", "123456", "127.0.0.1", 5236)
 	testConfig(dbConfig, `SELECT 1`)
 }
 
