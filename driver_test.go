@@ -27,7 +27,7 @@ func TestOracle(t *testing.T) {
 }
 
 func TestKingBase(t *testing.T) {
-	dbConfig := db_kingbase.NewDataSourceConfig("SYSTEM", "123456", "127.0.0.1", 54321, "TEST")
+	dbConfig := db_kingbase.NewDataSourceConfig("root", "123456", "127.0.0.1", 54321, "")
 	testConfig(dbConfig, `SELECT 1`)
 }
 
