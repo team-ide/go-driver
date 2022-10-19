@@ -2,7 +2,7 @@ module github.com/team-ide/go-driver
 
 go 1.18
 
-replace go-aci => ./driver/shentong/aci
+replace go-aci => ./driver/shentong/go_aci-1.0.8.noarch.publish/drivers/go-aci
 
 replace v8r3/kingbase.com/gokb => ./driver/kingbase/v8r3/kingbase.com/gokb
 
