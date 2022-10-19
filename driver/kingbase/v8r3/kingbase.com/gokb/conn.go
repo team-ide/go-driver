@@ -51,7 +51,7 @@ func (d *Driver) Open(name string) (driver.Conn, error) {
 }
 
 func init() {
-	sql.Register("kingbase", &Driver{})
+	sql.Register("v8r3-kingbase", &Driver{})
 }
 
 type parameterStatus struct {
