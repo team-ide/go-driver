@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"time"
 
-	"kingbase.com/gokb/oid"
+	"v8r6/kingbase.com/gokb/oid"
 )
 
 const headerSize = 4

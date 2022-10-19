@@ -21,10 +21,9 @@ import (
 	"time"
 	"unicode"
 
-	"kingbase.com/gokb/oid"
-	"kingbase.com/gokb/scram"
+	"v8r6/kingbase.com/gokb/oid"
+	"v8r6/kingbase.com/gokb/scram"
 )
-
 
 // INFO
 const GOKB_Version_V008R006C002B0105 = iota

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"kingbase.com/gokb/oid"
+	"v8r3/kingbase.com/gokb/oid"
 )
 
 type readBuf []byte

@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"kingbase.com/gokb/oid"
+	"v8r3/kingbase.com/gokb/oid"
 )
 
 func binaryEncode(parameterStatus *parameterStatus, x interface{}) []byte {
@@ -26,9 +26,6 @@ func binaryEncode(parameterStatus *parameterStatus, x interface{}) []byte {
 }
 
 func encode(parameterStatus *parameterStatus, x interface{}, pgtypOid oid.Oid) []byte {
-	//t := reflect.TypeOf(x)
-	//bs := strconv.AppendBool(nil, v)
-	//fmt.Println("encode x:", x, ",type:", t.Name(), ",pgtypOid:", pgtypOid)
 	switch v := x.(type) {
 	case int64:
 		return strconv.AppendInt(nil, v, 10)
@@ -47,11 +44,7 @@ func encode(parameterStatus *parameterStatus, x interface{}, pgtypOid oid.Oid) [
 
 		return []byte(v)
 	case bool:
-		if x == true {
-			return []byte("1")
-		}
-		return []byte("0")
-		//return strconv.AppendBool(nil, v)
+		return strconv.AppendBool(nil, v)
 	case time.Time:
 		return formatTs(v)
 

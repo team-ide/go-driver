@@ -1,10 +1,10 @@
-package db_kingbase
+package db_kingbase_v8r6
 
 import (
 	"fmt"
 	"gitee.com/chunanyong/zorm"
 	//_ "github.com/lib/pq"
-	_ "kingbase.com/gokb"
+	_ "v8r6/kingbase.com/gokb"
 )
 
 func NewDataSourceConfig(user string, password string, host string, port int, database string) zorm.DataSourceConfig {

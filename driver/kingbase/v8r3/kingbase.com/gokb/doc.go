@@ -7,7 +7,7 @@ using this package directly. For example:
 	import (
 		"database/sql"
 
-		_ "kingbase/gokb"
+		_ "kingbase.com/gokb"
 	)
 
 	func main() {

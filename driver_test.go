@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"gitee.com/chunanyong/zorm"
 	"github.com/team-ide/go-driver/db_dm"
-	"github.com/team-ide/go-driver/db_kingbase"
+	"github.com/team-ide/go-driver/db_kingbase_v8r3"
+	"github.com/team-ide/go-driver/db_kingbase_v8r6"
 	"github.com/team-ide/go-driver/db_mysql"
 	"github.com/team-ide/go-driver/db_oracle"
 	"github.com/team-ide/go-driver/db_sqlite3"
@@ -27,8 +28,13 @@ func TestOracle(t *testing.T) {
 	testConfig(dbConfig, `SELECT COUNT(*) FROM USER_TABLES`)
 }
 
-func TestKingBase(t *testing.T) {
-	dbConfig := db_kingbase.NewDataSourceConfig("root", "123456", "127.0.0.1", 54321, "")
+func TestKingBaseR3(t *testing.T) {
+	dbConfig := db_kingbase_v8r3.NewDataSourceConfig("root", "123456", "127.0.0.1", 54321, "")
+	testConfig(dbConfig, `SELECT 1`)
+}
+
+func TestKingBaseR6(t *testing.T) {
+	dbConfig := db_kingbase_v8r6.NewDataSourceConfig("root", "123456", "127.0.0.1", 54321, "")
 	testConfig(dbConfig, `SELECT 1`)
 }
 

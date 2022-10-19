@@ -1,1 +1,1 @@
-module kingbase.com/gokb
+module v8r6/kingbase.com/gokb

@@ -21,8 +21,8 @@ import (
 	"time"
 	"unicode"
 
-	"kingbase.com/gokb/oid"
-	"kingbase.com/gokb/scram"
+	"v8r3/kingbase.com/gokb/oid"
+	"v8r3/kingbase.com/gokb/scram"
 )
 
 const GOKBVersion_V008R003C002B1009 = iota
@@ -1137,7 +1137,7 @@ func (cn *conn) auth(r *readBuf, o values) {
 	case 5:
 		s := string(r.next(4))
 		w := cn.writeBuf('p')
-		w.string("md5" + md5s(md5s(o["password"] + strings.ToUpper(o["user"]))+s))
+		w.string("md5" + md5s(md5s(o["password"]+strings.ToUpper(o["user"]))+s))
 		cn.send(w)
 
 		t, r := cn.recv()
@@ -1627,10 +1627,10 @@ func (cn *conn) processParameterStatus(r *readBuf) {
 	case "server_version":
 		var major1 int
 		var major2 int
-		
+
 		_, err = fmt.Sscanf(r.string(), "V%dR%d", &major1, &major2)
 		if err == nil {
-			cn.parameterStatus.serverVersion = major1*10000 + major2*100 
+			cn.parameterStatus.serverVersion = major1*10000 + major2*100
 		}
 
 	case "TimeZone":
