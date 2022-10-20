@@ -249,6 +249,15 @@ PKG_CONFIG_PATH="C:\Code\go-driver\driver\shentong\go_aci-1.0.8.noarch.publish\d
 */
 ```
 
+**linux 环境配置**
+```shell
+# 设置环境变量
+export PKG_CONFIG_PATH = $PKG_CONFIG_PATH:/data/code/go-driver/driver/shentong/go_aci-1.0.8.noarch.publish/drivers/go-aci
+# 将driver/shentong/aci-2.0.47.linux64.publish/bin/libaci.so 复制 到 /usr/lib64/ 下
+*/
+```
+
+
 * 程序调用
 
 ```go
