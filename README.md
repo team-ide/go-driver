@@ -112,10 +112,9 @@ docker stop dm-5236
 #删除容器
 docker rm dm-5236
 
-# 端口: 54321
+# 端口: 5236
 # 用户名: SYSDBA
 # 密码: SYSDBA
-# 默认数据库: TEST
 ```
 
 * 程序调用
