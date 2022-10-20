@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestKinBase(t *testing.T) {
+func TestKingBase(t *testing.T) {
 	//dbConfig := db_kingbase_v8r3.NewDataSourceConfig("SYSTEM", "123456", "127.0.0.1", 54321, "TEST")
 	dbConfig := db_kingbase_v8r6.NewDataSourceConfig("SYSTEM", "123456", "127.0.0.1", 54321, "TEST")
 	sql := `select 2`
