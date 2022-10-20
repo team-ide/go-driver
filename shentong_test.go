@@ -8,11 +8,8 @@ import (
 	"testing"
 )
 
-/**
-set PKG_CONFIG_PATH="C:\Workspaces\Code\teamide\go-driver\driver\shentong\go_aci-1.0.8.noarch.publish\drivers\go-aci"
-*/
 func TestShenTong(t *testing.T) {
-	dbConfig := db_shentong.NewDataSourceConfig("SYSDBA", "szoscar55", "192.168.6.142", 2003, "OSRDB")
+	dbConfig := db_shentong.NewDataSourceConfig("SYSDBA", "szoscar55", "127.0.0.1", 2003, "OSRDB")
 	sql := `select 2`
 	dbDao, err := zorm.NewDBDao(&dbConfig)
 	if err != nil {

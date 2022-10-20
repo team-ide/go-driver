@@ -217,3 +217,74 @@ func TestKingBase(t *testing.T) {
 	}
 }
 ```
+
+
+## 神通
+
+* Docker 运行神通数据库
+
+```shell
+# 下载镜像
+docker pull teamide/shentong:7.0.8
+#运行一个容器
+docker run -itd --name shentong-2003 -p 2003:2003 teamide/shentong:7.0.8
+#停止容器
+docker stop shentong-2003
+#删除容器
+docker rm shentong-2003
+
+# 端口: 2003
+# 用户名: sysdba
+# 密码: szoscar55
+# 默认数据库: OSRDB
+```
+
+* 环境配置
+
+**window 环境配置**
+```shell
+# 设置环境变量
+PKG_CONFIG_PATH="C:\Code\go-driver\driver\shentong\go_aci-1.0.8.noarch.publish\drivers\go-aci"
+# 将go-driver/driver/shentong/aci-2.0.47.win64.publish/bin/aci.dll 复制 到 C:/Windows/System32 下
+*/
+```
+
+* 程序调用
+
+```go
+package go_driver
+
+import (
+	"context"
+	"fmt"
+	"gitee.com/chunanyong/zorm"
+	"github.com/team-ide/go-driver/db_shentong"
+	"testing"
+)
+
+func TestShenTong(t *testing.T) {
+	dbConfig := db_shentong.NewDataSourceConfig("SYSDBA", "szoscar55", "127.0.0.1", 2003, "OSRDB")
+	sql := `select 2`
+	dbDao, err := zorm.NewDBDao(&dbConfig)
+	if err != nil {
+		panic(err)
+	}
+
+	cxt := context.Background()
+	cxt, err = dbDao.BindContextDBConnection(cxt)
+	if err != nil {
+		panic(err)
+	}
+	finder := zorm.NewFinder()
+	finder.Append(sql)
+
+	var count int
+	_, err = zorm.QueryRow(cxt, finder, &count)
+	fmt.Printf("result:%d\n", count)
+	if count == 2 {
+		fmt.Println("test success")
+	} else {
+		panic("test fail")
+	}
+}
+```
