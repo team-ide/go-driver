@@ -1,4 +1,4 @@
-package go_driver
+package main
 
 import (
 	"context"
