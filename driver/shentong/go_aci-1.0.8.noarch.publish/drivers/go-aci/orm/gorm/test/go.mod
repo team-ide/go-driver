@@ -26,6 +26,6 @@ require (
 )
 
 replace (
-	go-aci => ./go-aci
-	oscar => ./oscar
+	go-aci => ../../../
+	oscar => ../dialects/oscar
 )
