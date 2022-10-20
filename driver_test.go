@@ -14,14 +14,6 @@ func TestOracle(t *testing.T) {
 	testConfig(dbConfig, `SELECT COUNT(*) FROM USER_TABLES`)
 }
 
-/**
-set PKG_CONFIG_PATH="C:\Workspaces\Code\teamide\go-driver\driver\shentong\go_aci-1.0.8.noarch.publish\drivers\go-aci"
-*/
-//func TestShenTong(t *testing.T) {
-//	dbConfig := db_shentong.NewDataSourceConfig("SYSDBA", "szoscar55", "192.168.6.142", 2003, "OSRDB")
-//	testConfig(dbConfig, `SELECT 1`)
-//}
-
 func TestConn(t *testing.T) {
 	_, err := net.DialTimeout("tcp", "127.0.0.1:5236", 0)
 	if err != nil {
