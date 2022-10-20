@@ -1,5 +1,5 @@
-includedir=C:\Workspaces\Code\teamide\go-driver\driver\shentong\aci-2.0.47.win64.publish\drivers\aci\include
-libdir=C:\Workspaces\Code\teamide\go-driver\driver\shentong\aci-2.0.47.win64.publish\drivers\aci\win64
+includedir=include
+libdir=lib/win64
 
 Name: aci
 Description: ShenTong Database Client
