@@ -1,4 +1,4 @@
-package aci
+package main
 
 import (
 	"database/sql"
