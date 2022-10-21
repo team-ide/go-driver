@@ -8,6 +8,10 @@ Go数据库驱动
 * [Sqlite3](#Sqlite3)
 * [Oracle](#Oracle)
 
+## 编译
+
+* [参照 编译 说明](编译.md)
+
 ## Mysql
 
 * Docker 运行MySql
@@ -250,9 +254,6 @@ docker rm shentong-2003
 
 **window 环境配置**
 ```shell
-# 设置环境变量
-PKG_CONFIG_PATH="C:\Code\go-driver\driver\shentong\go_aci-1.0.8.noarch.publish\drivers\go-aci"
-
 # 配置 动态链接库
 # 将go-driver/driver/shentong/aci-2.0.47.win64.publish/bin/aci.dll 复制 到 C:/Windows/System32 下
 
@@ -261,8 +262,6 @@ PKG_CONFIG_PATH="C:\Code\go-driver\driver\shentong\go_aci-1.0.8.noarch.publish\d
 
 **linux 环境配置**
 ```shell
-# 设置环境变量
-export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/data/code/go-driver/driver/shentong/go_aci-1.0.8.noarch.publish/drivers/go-aci
 # 将driver/shentong/aci-2.0.47.linux64.publish/bin/libaci.so 复制 到 /usr/lib64/ 下
 
 # 配置 动态链接库

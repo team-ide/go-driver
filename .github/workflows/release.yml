@@ -12,6 +12,27 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - run: |
+          mkdir -p windows-amd64
+          GOOS=windows GOARCH=amd64 go build . -o linux-amd64/main.exe
+          zip -q -r windows-amd64.zip windows-amd64
+          
+          mkdir -p linux-amd64
+          GOOS=linux GOARCH=amd64 go build . -o linux-amd64/main
+          zip -q -r linux-amd64.zip linux-amd64
+          
+          mkdir -p linux-arm64
+          GOOS=linux GOARCH=arm64 go build . -o linux-arm64/main
+          zip -q -r linux-arm64.zip linux-arm64
+          
+          mkdir -p linux-loong64
+          GOOS=linux GOARCH=loong64 go build . -o linux-loong64/main
+          zip -q -r linux-loong64.zip linux-loong64
+          
+          mkdir -p linux-mips64
+          GOOS=linux GOARCH=mips64 go build . -o linux-loong64/main
+          zip -q -r linux-mips64.zip linux-mips64
+
 
       - name: Checkout git repo
         uses: actions/checkout@v1
@@ -49,3 +70,58 @@ jobs:
           body: ${{steps.release_body.outputs.content}}
           draft: false # 是否是草稿
           prerelease: false # 是否是预发布
+
+      # 上传 到 Release
+      - if: ${{ steps.release_check.outputs.RELEASE_STATUS == 404 }}
+        uses: actions/upload-release-asset@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
+          asset_path: windows-amd64.zip
+          asset_name: windows-amd64.zip # 上传后的文件名
+          asset_content_type: application/zip
+
+      # 上传 到 Release
+      - if: ${{ steps.release_check.outputs.RELEASE_STATUS == 404 }}
+        uses: actions/upload-release-asset@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
+          asset_path: linux-amd64.zip
+          asset_name: linux-amd64.zip # 上传后的文件名
+          asset_content_type: application/zip
+
+      # 上传 到 Release
+      - if: ${{ steps.release_check.outputs.RELEASE_STATUS == 404 }}
+        uses: actions/upload-release-asset@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
+          asset_path: linux-arm64.zip
+          asset_name: linux-arm64.zip # 上传后的文件名
+          asset_content_type: application/zip
+
+      # 上传 到 Release
+      - if: ${{ steps.release_check.outputs.RELEASE_STATUS == 404 }}
+        uses: actions/upload-release-asset@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
+          asset_path: linux-loong64.zip
+          asset_name: linux-loong64.zip # 上传后的文件名
+          asset_content_type: application/zip
+
+      # 上传 到 Release
+      - if: ${{ steps.release_check.outputs.RELEASE_STATUS == 404 }}
+        uses: actions/upload-release-asset@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
+          asset_path: linux-mips64.zip
+          asset_name: linux-mips64.zip # 上传后的文件名
+          asset_content_type: application/zip
