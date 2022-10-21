@@ -21,8 +21,8 @@ import (
 	"time"
 	"unicode"
 
-	"v8r6/kingbase.com/gokb/oid"
-	"v8r6/kingbase.com/gokb/scram"
+	"github.com/team-ide/go-driver/driver/kingbase/v8r6/kingbase.com/gokb/oid"
+	"github.com/team-ide/go-driver/driver/kingbase/v8r6/kingbase.com/gokb/scram"
 )
 
 // INFO

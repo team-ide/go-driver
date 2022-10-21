@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"v8r3/kingbase.com/gokb/oid"
+	"github.com/team-ide/go-driver/driver/kingbase/v8r3/kingbase.com/gokb/oid"
 )
 
 func binaryEncode(parameterStatus *parameterStatus, x interface{}) []byte {

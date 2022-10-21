@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"time"
 
-	"v8r6/kingbase.com/gokb/oid"
+	"github.com/team-ide/go-driver/driver/kingbase/v8r6/kingbase.com/gokb/oid"
 )
 
 const headerSize = 4

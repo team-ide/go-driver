@@ -21,8 +21,8 @@ import (
 	"time"
 	"unicode"
 
-	"v8r3/kingbase.com/gokb/oid"
-	"v8r3/kingbase.com/gokb/scram"
+	"github.com/team-ide/go-driver/driver/kingbase/v8r3/kingbase.com/gokb/oid"
+	"github.com/team-ide/go-driver/driver/kingbase/v8r3/kingbase.com/gokb/scram"
 )
 
 const GOKBVersion_V008R003C002B1009 = iota
