@@ -22,30 +22,30 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: "^1.18"
-          
+
       - run: |
           mkdir -p windows-amd64
-          GOOS=windows GOARCH=amd64 go build . -o windows-amd64/main.exe
+          GOOS=windows GOARCH=amd64 go build -o windows-amd64/main.exe .
           zip -q -r windows-amd64.zip windows-amd64
 
       - run: |
           mkdir -p linux-amd64
-          GOOS=linux GOARCH=amd64 go build . -o linux-amd64/main
+          GOOS=linux GOARCH=amd64 go build -o linux-amd64/main .
           zip -q -r linux-amd64.zip linux-amd64
 
       - run: |
           mkdir -p linux-arm64
-          GOOS=linux GOARCH=arm64 go build . -o linux-arm64/main
+          GOOS=linux GOARCH=arm64 go build -o linux-arm64/main .
           zip -q -r linux-arm64.zip linux-arm64
 
       - run: |
           mkdir -p linux-loong64
-          GOOS=linux GOARCH=loong64 go build . -o linux-loong64/main
+          GOOS=linux GOARCH=loong64 go build -o linux-loong64/main .
           zip -q -r linux-loong64.zip linux-loong64
 
       - run: |
           mkdir -p linux-mips64
-          GOOS=linux GOARCH=mips64 go build . -o linux-loong64/main
+          GOOS=linux GOARCH=mips64 go build -o linux-loong64/main .
           zip -q -r linux-mips64.zip linux-mips64
 
 
