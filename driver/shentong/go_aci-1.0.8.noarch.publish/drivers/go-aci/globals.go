@@ -1,7 +1,7 @@
 package aci
 
 /*
-#cgo !noPkgConfig pkg-config: aci
+// ##  #cgo !noPkgConfig pkg-config: aci
 #include "aci.go.h"
 */
 import "C"
