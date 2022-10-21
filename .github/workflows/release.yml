@@ -25,9 +25,7 @@ jobs:
 
       - run: |
           mkdir -p release/windows-amd64
-          CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -o release/windows-amd64/main.exe .
-          cd release 
-          zip -q -r windows-amd64.zip windows-amd64
+          go build -o release/windows-amd64/main.exe .
 
       # 上传共享资源
       - uses: actions/upload-artifact@v2
@@ -50,27 +48,19 @@ jobs:
 
       - run: |
           mkdir -p release/linux-amd64
-          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o release/linux-amd64/main .
-          cd release
-          zip -q -r linux-amd64.zip linux-amd64
+          GOOS=linux GOARCH=amd64 go build -o release/linux-amd64/main .
 
       - run: |
           mkdir -p release/linux-arm64
-          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o release/linux-arm64/main .
-          cd release
-          zip -q -r linux-arm64.zip linux-arm64
+          GOOS=linux GOARCH=arm64 go build -o release/linux-arm64/main .
 
       - run: |
           mkdir -p release/linux-loong64
-          CGO_ENABLED=0 GOOS=linux GOARCH=loong64 go build -o release/linux-loong64/main .
-          cd release
-          zip -q -r linux-loong64.zip linux-loong64
+          GOOS=linux GOARCH=loong64 go build -o release/linux-loong64/main .
 
       - run: |
           mkdir -p release/linux-mips64
-          CGO_ENABLED=0 GOOS=linux GOARCH=mips64 go build -o release/linux-loong64/main .
-          cd release
-          zip -q -r linux-mips64.zip linux-mips64
+          GOOS=linux GOARCH=mips64 go build -o release/linux-loong64/main .
 
       # 上传共享资源
       - uses: actions/upload-artifact@v2
@@ -117,7 +107,14 @@ jobs:
         uses: juliangruber/read-file-action@v1
         with:
           path: RELEASE.md
-
+      - if: ${{ steps.release_check.outputs.RELEASE_STATUS == 404 }}
+        run: |
+          cd release
+          zip -q -r windows-amd64.zip windows-amd64
+          zip -q -r linux-amd64.zip linux-amd64
+          zip -q -r linux-arm64.zip linux-arm64
+          zip -q -r linux-loong64.zip linux-loong64
+          zip -q -r linux-mips64.zip linux-mips64
       # 发布
       - name: Create Release
         id: create_release
