@@ -52,7 +52,7 @@ jobs:
 
       - run: |
           mkdir -p release/linux-arm64
-          GOOS=linux GOARCH=arm64 go build -o release/linux-arm64/main .
+          CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o release/linux-arm64/main .
 
       - run: |
           mkdir -p release/linux-loong64
