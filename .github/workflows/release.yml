@@ -33,6 +33,29 @@ jobs:
           name: release
           path: release
 
+  buildMax:
+    runs-on: macos-latest
+    steps:
+      # 下载源码
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 打包构建 Server
+      - name: Build Server
+        uses: actions/setup-go@v2
+        with:
+          go-version: "^1.18"
+
+      - run: |
+          mkdir -p release/linux-arm64
+          GOOS=linux GOARCH=arm64 go build -o release/linux-arm64/main .
+
+      # 上传共享资源
+      - uses: actions/upload-artifact@v2
+        with:
+          name: release
+          path: release
+
   buildLinux:
     runs-on: ubuntu-latest
     steps:
@@ -49,20 +72,6 @@ jobs:
       - run: |
           mkdir -p release/linux-amd64
           GOOS=linux GOARCH=amd64 go build -o release/linux-amd64/main .
-
-      - run: apt-get install gcc-10-aarch64-linux-gnu
-
-      - run: |
-          mkdir -p release/linux-arm64
-          CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o release/linux-arm64/main .
-
-      - run: |
-          mkdir -p release/linux-loong64
-          GOOS=linux GOARCH=loong64 go build -o release/linux-loong64/main .
-
-      - run: |
-          mkdir -p release/linux-mips64
-          GOOS=linux GOARCH=mips64 go build -o release/linux-loong64/main .
 
       # 上传共享资源
       - uses: actions/upload-artifact@v2
@@ -115,8 +124,8 @@ jobs:
           zip -q -r windows-amd64.zip windows-amd64
           zip -q -r linux-amd64.zip linux-amd64
           zip -q -r linux-arm64.zip linux-arm64
-          zip -q -r linux-loong64.zip linux-loong64
-          zip -q -r linux-mips64.zip linux-mips64
+#          zip -q -r linux-loong64.zip linux-loong64
+#          zip -q -r linux-mips64.zip linux-mips64
       # 发布
       - name: Create Release
         id: create_release
@@ -162,26 +171,4 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
           asset_path: release/linux-arm64.zip
           asset_name: linux-arm64.zip # 上传后的文件名
-          asset_content_type: application/zip
-
-      # 上传 到 Release
-      - if: ${{ steps.release_check.outputs.RELEASE_STATUS == 404 }}
-        uses: actions/upload-release-asset@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
-          asset_path: release/linux-loong64.zip
-          asset_name: linux-loong64.zip # 上传后的文件名
-          asset_content_type: application/zip
-
-      # 上传 到 Release
-      - if: ${{ steps.release_check.outputs.RELEASE_STATUS == 404 }}
-        uses: actions/upload-release-asset@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
-          asset_path: release/linux-mips64.zip
-          asset_name: linux-mips64.zip # 上传后的文件名
           asset_content_type: application/zip
