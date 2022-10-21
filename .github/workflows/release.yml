@@ -50,6 +50,8 @@ jobs:
           mkdir -p release/linux-amd64
           GOOS=linux GOARCH=amd64 go build -o release/linux-amd64/main .
 
+      - run: apt-get install gcc-10-aarch64-linux-gnu
+
       - run: |
           mkdir -p release/linux-arm64
           CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o release/linux-arm64/main .
