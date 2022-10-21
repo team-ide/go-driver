@@ -33,7 +33,7 @@ jobs:
           name: release
           path: release
 
-  buildMax:
+  buildMacos:
     runs-on: macos-latest
     steps:
       # 下载源码
@@ -84,6 +84,7 @@ jobs:
     needs:
       - buildLinux
       - buildWindow
+      - buildMacos
     runs-on: ubuntu-latest
     steps:
 
