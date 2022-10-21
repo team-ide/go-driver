@@ -9,13 +9,13 @@ on:
     # package.json 更改后再触发发布
 #    paths: [ "package.json" ]
 jobs:
-  release:
-    runs-on: ubuntu-latest
+
+  buildWindow:
+    runs-on: windows-latest
     steps:
-
-      - name: Checkout git repo
-        uses: actions/checkout@v1
-
+      # 下载源码
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       # 打包构建 Server
       - name: Build Server
@@ -24,33 +24,79 @@ jobs:
           go-version: "^1.18"
 
       - run: |
-          mkdir -p windows-amd64
-          CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -o windows-amd64/main.exe .
+          mkdir -p release/windows-amd64
+          CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -o release/windows-amd64/main.exe .
+          cd release 
           zip -q -r windows-amd64.zip windows-amd64
 
+      # 上传共享资源
+      - uses: actions/upload-artifact@v2
+        with:
+          name: release
+          path: release
+
+  buildLinux:
+    runs-on: ubuntu-latest
+    steps:
+      # 下载源码
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 打包构建 Server
+      - name: Build Server
+        uses: actions/setup-go@v2
+        with:
+          go-version: "^1.18"
+
       - run: |
-          mkdir -p linux-amd64
-          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o linux-amd64/main .
+          mkdir -p release/linux-amd64
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o release/linux-amd64/main .
+          cd release
           zip -q -r linux-amd64.zip linux-amd64
 
       - run: |
-          mkdir -p linux-arm64
-          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o linux-arm64/main .
+          mkdir -p release/linux-arm64
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o release/linux-arm64/main .
+          cd release
           zip -q -r linux-arm64.zip linux-arm64
 
       - run: |
-          mkdir -p linux-loong64
-          CGO_ENABLED=0 GOOS=linux GOARCH=loong64 go build -o linux-loong64/main .
+          mkdir -p release/linux-loong64
+          CGO_ENABLED=0 GOOS=linux GOARCH=loong64 go build -o release/linux-loong64/main .
+          cd release
           zip -q -r linux-loong64.zip linux-loong64
 
       - run: |
-          mkdir -p linux-mips64
-          CGO_ENABLED=0 GOOS=linux GOARCH=mips64 go build -o linux-loong64/main .
+          mkdir -p release/linux-mips64
+          CGO_ENABLED=0 GOOS=linux GOARCH=mips64 go build -o release/linux-loong64/main .
+          cd release
           zip -q -r linux-mips64.zip linux-mips64
 
+      # 上传共享资源
+      - uses: actions/upload-artifact@v2
+        with:
+          name: release
+          path: release
+
+
+  release:
+    needs:
+      - buildLinux
+      - buildWindow
+    runs-on: ubuntu-latest
+    steps:
 
       - name: Checkout git repo
         uses: actions/checkout@v1
+
+      - name: Checkout git repo
+        uses: actions/checkout@v1
+
+      # 下载共享资源
+      - uses: actions/download-artifact@v2
+        with:
+          name: release
+          path: release
 
       # 读取发布版本
       - name: Read Release Version
@@ -93,7 +139,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
-          asset_path: windows-amd64.zip
+          asset_path: release/windows-amd64.zip
           asset_name: windows-amd64.zip # 上传后的文件名
           asset_content_type: application/zip
 
@@ -104,7 +150,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
-          asset_path: linux-amd64.zip
+          asset_path: release/linux-amd64.zip
           asset_name: linux-amd64.zip # 上传后的文件名
           asset_content_type: application/zip
 
@@ -115,7 +161,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
-          asset_path: linux-arm64.zip
+          asset_path: release/linux-arm64.zip
           asset_name: linux-arm64.zip # 上传后的文件名
           asset_content_type: application/zip
 
@@ -126,7 +172,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
-          asset_path: linux-loong64.zip
+          asset_path: release/linux-loong64.zip
           asset_name: linux-loong64.zip # 上传后的文件名
           asset_content_type: application/zip
 
@@ -137,6 +183,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
-          asset_path: linux-mips64.zip
+          asset_path: release/linux-mips64.zip
           asset_name: linux-mips64.zip # 上传后的文件名
           asset_content_type: application/zip
