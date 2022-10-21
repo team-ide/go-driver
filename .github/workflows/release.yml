@@ -48,7 +48,7 @@ jobs:
 
       - run: |
           mkdir -p release/linux-arm64
-          GOOS=linux GOARCH=arm64 go build -o release/linux-arm64/main .
+          CGO_ENABLED=1 GOOS=linux GOARCH=arm64 go build -o release/linux-arm64/main .
 
       # 上传共享资源
       - uses: actions/upload-artifact@v2
