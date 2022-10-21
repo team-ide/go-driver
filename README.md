@@ -255,17 +255,15 @@ docker rm shentong-2003
 **window 环境配置**
 ```shell
 # 配置 动态链接库
-# 将go-driver/driver/shentong/aci-2.0.47.win64.publish/bin/aci.dll 复制 到 C:/Windows/System32 下
-
-# 也可以将 aci.dll 放在程序目录
+# 将go-driver/driver/shentong/go-aci/lib/win64/aci.dll 复制 到 C:/Windows/System32 下
+# 或 将 aci.dll 放在程序目录
 ```
 
 **linux 环境配置**
 ```shell
-# 将driver/shentong/aci-2.0.47.linux64.publish/bin/libaci.so 复制 到 /usr/lib64/ 下
-
-# 配置 动态链接库
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/data/code/go-driver/driver/shentong/aci-2.0.47.linux64.publish/bin/
+# 将go-driver/driver/shentong/go-aci/lib/linux64/libaci.so 复制 到 /usr/lib64/ 下
+# 或 配置 动态链接库
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:go-driver/driver/shentong/go-aci/lib/linux64/
 ```
 
 
