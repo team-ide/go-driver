@@ -10,71 +10,68 @@ on:
 #    paths: [ "package.json" ]
 jobs:
 
-  buildWindow:
-    runs-on: windows-latest
-    steps:
-      # 下载源码
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      # 打包构建 Server
-      - name: Build Server
-        uses: actions/setup-go@v2
-        with:
-          go-version: "^1.18"
-
-      - run: |
-          mkdir -p release/windows-amd64
-          go build -o release/windows-amd64/main.exe .
-
-      # 上传共享资源
-      - uses: actions/upload-artifact@v2
-        with:
-          name: release
-          path: release
-
-  buildLinux:
-    runs-on: ubuntu-latest
-    steps:
-      # 下载源码
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      # 打包构建 Server
-      - name: Build Server
-        uses: actions/setup-go@v2
-        with:
-          go-version: "^1.18"
-
-      - run: |
-          mkdir -p release/linux-amd64
-          GOOS=linux GOARCH=amd64 go build -o release/linux-amd64/main .
-
-      # 上传共享资源
-      - uses: actions/upload-artifact@v2
-        with:
-          name: release
-          path: release
+#  buildWindow:
+#    runs-on: windows-latest
+#    steps:
+#      # 下载源码
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+#
+#      # 打包构建 Server
+#      - name: Build Server
+#        uses: actions/setup-go@v2
+#        with:
+#          go-version: "^1.18"
+#
+#      - run: |
+#          mkdir -p release/windows-amd64
+#          go build -o release/windows-amd64/main.exe .
+#
+#      # 上传共享资源
+#      - uses: actions/upload-artifact@v2
+#        with:
+#          name: release
+#          path: release
+#
+#  buildLinux:
+#    runs-on: ubuntu-latest
+#    steps:
+#      # 下载源码
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+#
+#      # 打包构建 Server
+#      - name: Build Server
+#        uses: actions/setup-go@v2
+#        with:
+#          go-version: "^1.18"
+#
+#      - run: |
+#          mkdir -p release/linux-amd64
+#          GOOS=linux GOARCH=amd64 go build -o release/linux-amd64/main .
+#
+#      # 上传共享资源
+#      - uses: actions/upload-artifact@v2
+#        with:
+#          name: release
+#          path: release
 
 
   release:
-    needs:
-      - buildLinux
-      - buildWindow
+#    needs:
+#      - buildLinux
+#      - buildWindow
     runs-on: ubuntu-latest
     steps:
-
-      - name: Checkout git repo
-        uses: actions/checkout@v1
 
       - name: Checkout git repo
         uses: actions/checkout@v1
 
       # 下载共享资源
-      - uses: actions/download-artifact@v2
-        with:
-          name: release
-          path: release
+#      - uses: actions/download-artifact@v2
+#        with:
+#          name: release
+#          path: release
 
       # 读取发布版本
       - name: Read Release Version
@@ -95,11 +92,11 @@ jobs:
         uses: juliangruber/read-file-action@v1
         with:
           path: RELEASE.md
-      - if: ${{ steps.release_check.outputs.RELEASE_STATUS == 404 }}
-        run: |
-          cd release
-          zip -q -r windows-amd64.zip windows-amd64
-          zip -q -r linux-amd64.zip linux-amd64
+#      - if: ${{ steps.release_check.outputs.RELEASE_STATUS == 404 }}
+#        run: |
+#          cd release
+#          zip -q -r windows-amd64.zip windows-amd64
+#          zip -q -r linux-amd64.zip linux-amd64
 #          zip -q -r linux-arm64.zip linux-arm64
 #          zip -q -r linux-loong64.zip linux-loong64
 #          zip -q -r linux-mips64.zip linux-mips64
@@ -118,23 +115,23 @@ jobs:
           prerelease: false # 是否是预发布
 
       # 上传 到 Release
-      - if: ${{ steps.release_check.outputs.RELEASE_STATUS == 404 }}
-        uses: actions/upload-release-asset@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
-          asset_path: release/windows-amd64.zip
-          asset_name: windows-amd64.zip # 上传后的文件名
-          asset_content_type: application/zip
-
-      # 上传 到 Release
-      - if: ${{ steps.release_check.outputs.RELEASE_STATUS == 404 }}
-        uses: actions/upload-release-asset@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
-          asset_path: release/linux-amd64.zip
-          asset_name: linux-amd64.zip # 上传后的文件名
-          asset_content_type: application/zip
+#      - if: ${{ steps.release_check.outputs.RELEASE_STATUS == 404 }}
+#        uses: actions/upload-release-asset@master
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
+#          asset_path: release/windows-amd64.zip
+#          asset_name: windows-amd64.zip # 上传后的文件名
+#          asset_content_type: application/zip
+#
+#      # 上传 到 Release
+#      - if: ${{ steps.release_check.outputs.RELEASE_STATUS == 404 }}
+#        uses: actions/upload-release-asset@master
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
+#          asset_path: release/linux-amd64.zip
+#          asset_name: linux-amd64.zip # 上传后的文件名
+#          asset_content_type: application/zip
