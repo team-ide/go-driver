@@ -7,7 +7,8 @@ Go数据库驱动
 * [神通](#神通)
 * [Sqlite3](#Sqlite3)
 * [Oracle](#Oracle)
-
+* [Postgresql](#Postgresql)
+  
 ## 编译
 
 * [参照 编译 说明](编译.md)
