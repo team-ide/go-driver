@@ -56,6 +56,16 @@ func (d *Driver) Open(name string) (driver.Conn, error) {
 
 func init() {
 	sql.Register("v8r6-kingbase", &Driver{})
+	bindDriver()
+}
+
+func bindDriver() {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("kingbase Driver bind:", r)
+		}
+	}()
+	sql.Register("kingbase", &Driver{})
 }
 
 type parameterStatus struct {

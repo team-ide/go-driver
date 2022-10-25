@@ -44,7 +44,11 @@ func encode(parameterStatus *parameterStatus, x interface{}, pgtypOid oid.Oid) [
 
 		return []byte(v)
 	case bool:
-		return strconv.AppendBool(nil, v)
+		if x == true {
+			return []byte("1")
+		}
+		return []byte("0")
+		//return strconv.AppendBool(nil, v)
 	case time.Time:
 		return formatTs(v)
 
