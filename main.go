@@ -1,14 +1,14 @@
 package main
 
 import (
-	"context"
+	"database/sql"
 	"flag"
 	"fmt"
-	"gitee.com/chunanyong/zorm"
 	"github.com/team-ide/go-driver/db_dm"
 	"github.com/team-ide/go-driver/db_kingbase_v8r6"
 	"github.com/team-ide/go-driver/db_mysql"
 	"github.com/team-ide/go-driver/db_oracle"
+	"github.com/team-ide/go-driver/db_postgresql"
 	"github.com/team-ide/go-driver/db_shentong"
 	"github.com/team-ide/go-driver/db_sqlite3"
 )
@@ -45,54 +45,64 @@ func main() {
 			return
 		}
 	}
-	var dbConfig zorm.DataSourceConfig
-	var sql string
+	var db *sql.DB
+	var sqlInfo string
+	var err error
 	switch *dbType {
 	case "mysql":
-		dbConfig = db_mysql.NewDataSourceConfig(*user, *password, *host, *port, *database)
-		sql = `select 2`
+		dsn := db_mysql.GetDSN(*user, *password, *host, *port, *database)
+		db, err = db_mysql.Open(dsn)
+		sqlInfo = `select 2`
 		break
 	case "sqlite3":
-		dbConfig = db_sqlite3.NewDataSourceConfig(*database)
-		sql = `select 2`
+		dsn := db_sqlite3.GetDSN(*database)
+		db, err = db_sqlite3.Open(dsn)
+		sqlInfo = `select 2`
 		break
 	case "dm":
-		dbConfig = db_dm.NewDataSourceConfig(*user, *password, *host, *port)
-		sql = `select 2`
+		dsn := db_dm.GetDSN(*user, *password, *host, *port)
+		db, err = db_dm.Open(dsn)
+		sqlInfo = `select 2`
 		break
 	case "kingbase":
-		dbConfig = db_kingbase_v8r6.NewDataSourceConfig(*user, *password, *host, *port, *database)
-		sql = `select 2`
+		dsn := db_kingbase_v8r6.GetDSN(*user, *password, *host, *port, *database)
+		db, err = db_kingbase_v8r6.Open(dsn)
+		sqlInfo = `select 2`
 		break
 	case "oracle":
-		dbConfig = db_oracle.NewDataSourceConfig(*user, *password, *host, *port, *database)
-		sql = `select 2 from dual`
+		dsn := db_oracle.GetDSN(*user, *password, *host, *port, *database)
+		db, err = db_oracle.Open(dsn)
+		sqlInfo = `select 2 from dual`
 		break
 	case "shentong":
-		dbConfig = db_shentong.NewDataSourceConfig(*user, *password, *host, *port, *database)
-		sql = `select 2`
+		dsn := db_shentong.GetDSN(*user, *password, *host, *port, *database)
+		db, err = db_shentong.Open(dsn)
+		sqlInfo = `select 2`
+		break
+	case "postgresql":
+		dsn := db_postgresql.GetDSN(*user, *password, *host, *port, *database)
+		db, err = db_postgresql.Open(dsn)
+		sqlInfo = `select 2`
 		break
 	}
-	connDb(dbConfig, sql)
+	if err != nil {
+		panic(err)
+	}
+	connDb(db, sqlInfo)
 
 }
 
-func connDb(dbConfig zorm.DataSourceConfig, sql string) {
-	dbDao, err := zorm.NewDBDao(&dbConfig)
-	if err != nil {
-		panic(err)
-	}
-
-	cxt := context.Background()
-	cxt, err = dbDao.BindContextDBConnection(cxt)
-	if err != nil {
-		panic(err)
-	}
-	finder := zorm.NewFinder()
-	finder.Append(sql)
-
+func connDb(db *sql.DB, sql string) {
 	var count int
-	_, err = zorm.QueryRow(cxt, finder, &count)
+	rows, err := db.Query(sql)
+	if err != nil {
+		panic(err)
+	}
+	rows.Next()
+	err = rows.Scan(&count)
+	if err != nil {
+		panic(err)
+	}
 	fmt.Printf("result:%d\n", count)
 	if count == 2 {
 		fmt.Println("test success")

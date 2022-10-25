@@ -30,41 +30,40 @@ docker rm mysql-3306
 * 程序调用
 
 ```go
-package go_driver
+package main
 
 import (
-	"context"
-	"fmt"
-	"gitee.com/chunanyong/zorm"
-	"github.com/team-ide/go-driver/db_mysql"
-	"testing"
+  "fmt"
+  "github.com/team-ide/go-driver/db_mysql"
+  "testing"
 )
 
 func TestMysql(t *testing.T) {
-	dbConfig := db_mysql.NewDataSourceConfig("root", "123456", "127.0.0.1", 3306, "")
-	sql := `select 2`
-	dbDao, err := zorm.NewDBDao(&dbConfig)
-	if err != nil {
-		panic(err)
-	}
 
-	cxt := context.Background()
-	cxt, err = dbDao.BindContextDBConnection(cxt)
-	if err != nil {
-		panic(err)
-	}
-	finder := zorm.NewFinder()
-	finder.Append(sql)
-
-	var count int
-	_, err = zorm.QueryRow(cxt, finder, &count)
-	fmt.Printf("result:%d\n", count)
-	if count == 2 {
-		fmt.Println("test success")
-	} else {
-		panic("test fail")
-	}
+  dsn := db_mysql.GetDSN("root", "123456", "127.0.0.1", 3306, "")
+  db, err := db_mysql.Open(dsn)
+  if err != nil {
+    panic(err)
+  }
+  sql := `select 2`
+  var count int
+  rows, err := db.Query(sql)
+  if err != nil {
+    panic(err)
+  }
+  rows.Next()
+  err = rows.Scan(&count)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Printf("result:%d\n", count)
+  if count == 2 {
+    fmt.Println("test success")
+  } else {
+    panic("test fail")
+  }
 }
+
 ```
 
 ## Sqlite3
@@ -72,41 +71,40 @@ func TestMysql(t *testing.T) {
 * 程序调用
 
 ```go
-package go_driver
+package main
 
 import (
-	"context"
-	"fmt"
-	"gitee.com/chunanyong/zorm"
-	"github.com/team-ide/go-driver/db_sqlite3"
-	"testing"
+  "fmt"
+  "github.com/team-ide/go-driver/db_sqlite3"
+  "testing"
 )
 
 func TestSqlite3(t *testing.T) {
-	dbConfig := db_sqlite3.NewDataSourceConfig("test-sqlite3")
-	sql := `select 2`
-	dbDao, err := zorm.NewDBDao(&dbConfig)
-	if err != nil {
-		panic(err)
-	}
 
-	cxt := context.Background()
-	cxt, err = dbDao.BindContextDBConnection(cxt)
-	if err != nil {
-		panic(err)
-	}
-	finder := zorm.NewFinder()
-	finder.Append(sql)
-
-	var count int
-	_, err = zorm.QueryRow(cxt, finder, &count)
-	fmt.Printf("result:%d\n", count)
-	if count == 2 {
-		fmt.Println("test success")
-	} else {
-		panic("test fail")
-	}
+  dsn := db_sqlite3.GetDSN("test-sqlite3")
+  db, err := db_sqlite3.Open(dsn)
+  if err != nil {
+    panic(err)
+  }
+  sql := `select 2`
+  var count int
+  rows, err := db.Query(sql)
+  if err != nil {
+    panic(err)
+  }
+  rows.Next()
+  err = rows.Scan(&count)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Printf("result:%d\n", count)
+  if count == 2 {
+    fmt.Println("test success")
+  } else {
+    panic("test fail")
+  }
 }
+
 ```
 
 ## 达梦
@@ -131,41 +129,39 @@ docker rm dm-5236
 * 程序调用
 
 ```go
-package go_driver
+package main
 
 import (
-	"context"
-	"fmt"
-	"gitee.com/chunanyong/zorm"
-	"github.com/team-ide/go-driver/db_dm"
-	"testing"
+  "fmt"
+  "github.com/team-ide/go-driver/db_dm"
+  "testing"
 )
 
 func TestDm(t *testing.T) {
-	dbConfig := db_dm.NewDataSourceConfig("SYSDBA", "SYSDBA", "127.0.0.1", 5236)
-	sql := `select 2`
-	dbDao, err := zorm.NewDBDao(&dbConfig)
-	if err != nil {
-		panic(err)
-	}
-
-	cxt := context.Background()
-	cxt, err = dbDao.BindContextDBConnection(cxt)
-	if err != nil {
-		panic(err)
-	}
-	finder := zorm.NewFinder()
-	finder.Append(sql)
-
-	var count int
-	_, err = zorm.QueryRow(cxt, finder, &count)
-	fmt.Printf("result:%d\n", count)
-	if count == 2 {
-		fmt.Println("test success")
-	} else {
-		panic("test fail")
-	}
+  dsn := db_dm.GetDSN("SYSDBA", "SYSDBA", "127.0.0.1", 5236)
+  db, err := db_dm.Open(dsn)
+  if err != nil {
+    panic(err)
+  }
+  sql := `select 2`
+  var count int
+  rows, err := db.Query(sql)
+  if err != nil {
+    panic(err)
+  }
+  rows.Next()
+  err = rows.Scan(&count)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Printf("result:%d\n", count)
+  if count == 2 {
+    fmt.Println("test success")
+  } else {
+    panic("test fail")
+  }
 }
+
 ```
 
 ## 金仓
@@ -191,42 +187,39 @@ docker rm kingbase-54321
 * 程序调用
 
 ```go
-package go_driver
+package main
 
 import (
-	"context"
-	"fmt"
-	"gitee.com/chunanyong/zorm"
-	"github.com/team-ide/go-driver/db_kingbase_v8r6"
-	"testing"
+  "fmt"
+  "github.com/team-ide/go-driver/db_kingbase_v8r6"
+  "testing"
 )
 
 func TestKingBase(t *testing.T) {
-	//dbConfig := db_kingbase_v8r3.NewDataSourceConfig("SYSTEM", "123456", "127.0.0.1", 54321, "TEST")
-	dbConfig := db_kingbase_v8r6.NewDataSourceConfig("SYSTEM", "123456", "127.0.0.1", 54321, "TEST")
-	sql := `select 2`
-	dbDao, err := zorm.NewDBDao(&dbConfig)
-	if err != nil {
-		panic(err)
-	}
-
-	cxt := context.Background()
-	cxt, err = dbDao.BindContextDBConnection(cxt)
-	if err != nil {
-		panic(err)
-	}
-	finder := zorm.NewFinder()
-	finder.Append(sql)
-
-	var count int
-	_, err = zorm.QueryRow(cxt, finder, &count)
-	fmt.Printf("result:%d\n", count)
-	if count == 2 {
-		fmt.Println("test success")
-	} else {
-		panic("test fail")
-	}
+  dsn := db_kingbase_v8r6.GetDSN("SYSTEM", "123456", "127.0.0.1", 54321, "TEST")
+  db, err := db_kingbase_v8r6.Open(dsn)
+  if err != nil {
+    panic(err)
+  }
+  sql := `select 2`
+  var count int
+  rows, err := db.Query(sql)
+  if err != nil {
+    panic(err)
+  }
+  rows.Next()
+  err = rows.Scan(&count)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Printf("result:%d\n", count)
+  if count == 2 {
+    fmt.Println("test success")
+  } else {
+    panic("test fail")
+  }
 }
+
 ```
 
 
@@ -270,41 +263,40 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:go-driver/driver/shentong/go-aci/lib/lin
 * 程序调用
 
 ```go
-package go_driver
+package main
 
 import (
-	"context"
-	"fmt"
-	"gitee.com/chunanyong/zorm"
-	"github.com/team-ide/go-driver/db_shentong"
-	"testing"
+  "fmt"
+  "github.com/team-ide/go-driver/db_shentong"
+  "testing"
 )
 
 func TestShenTong(t *testing.T) {
-	dbConfig := db_shentong.NewDataSourceConfig("SYSDBA", "szoscar55", "127.0.0.1", 2003, "OSRDB")
-	sql := `select 2`
-	dbDao, err := zorm.NewDBDao(&dbConfig)
-	if err != nil {
-		panic(err)
-	}
 
-	cxt := context.Background()
-	cxt, err = dbDao.BindContextDBConnection(cxt)
-	if err != nil {
-		panic(err)
-	}
-	finder := zorm.NewFinder()
-	finder.Append(sql)
-
-	var count int
-	_, err = zorm.QueryRow(cxt, finder, &count)
-	fmt.Printf("result:%d\n", count)
-	if count == 2 {
-		fmt.Println("test success")
-	} else {
-		panic("test fail")
-	}
+  dsn := db_shentong.GetDSN("SYSDBA", "szoscar55", "127.0.0.1", 2003, "OSRDB")
+  db, err := db_shentong.Open(dsn)
+  if err != nil {
+    panic(err)
+  }
+  sql := `select 2`
+  var count int
+  rows, err := db.Query(sql)
+  if err != nil {
+    panic(err)
+  }
+  rows.Next()
+  err = rows.Scan(&count)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Printf("result:%d\n", count)
+  if count == 2 {
+    fmt.Println("test success")
+  } else {
+    panic("test fail")
+  }
 }
+
 ```
 
 ## Oracle
@@ -352,39 +344,100 @@ docker rm oracle-1521
 * 程序调用
 
 ```go
-package go_driver
+package main
 
 import (
-	"context"
-	"fmt"
-	"gitee.com/chunanyong/zorm"
-	"github.com/team-ide/go-driver/db_oracle"
-	"testing"
+  "fmt"
+  "github.com/team-ide/go-driver/db_oracle"
+  "testing"
 )
 
 func TestOracle(t *testing.T) {
-	dbConfig := db_oracle.NewDataSourceConfig("root", "123456", "127.0.0.1", 1521, "xe")
-	sql := `select 2 from dual`
-	dbDao, err := zorm.NewDBDao(&dbConfig)
-	if err != nil {
-		panic(err)
-	}
 
-	cxt := context.Background()
-	cxt, err = dbDao.BindContextDBConnection(cxt)
-	if err != nil {
-		panic(err)
-	}
-	finder := zorm.NewFinder()
-	finder.Append(sql)
-
-	var count int
-	_, err = zorm.QueryRow(cxt, finder, &count)
-	fmt.Printf("result:%d\n", count)
-	if count == 2 {
-		fmt.Println("test success")
-	} else {
-		panic("test fail")
-	}
+  dsn := db_oracle.GetDSN("root", "123456", "127.0.0.1", 1521, "xe")
+  db, err := db_oracle.Open(dsn)
+  if err != nil {
+    panic(err)
+  }
+  sql := `select 2 from dual`
+  var count int
+  rows, err := db.Query(sql)
+  if err != nil {
+    panic(err)
+  }
+  rows.Next()
+  err = rows.Scan(&count)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Printf("result:%d\n", count)
+  if count == 2 {
+    fmt.Println("test success")
+  } else {
+    panic("test fail")
+  }
 }
+
+```
+
+
+
+
+## Postgresql
+
+* Docker 运行Postgresql数据库
+
+```shell
+# 下载镜像
+docker pull postgres:11.14
+#运行一个容器
+docker run -itd --name postgres-5432 -p 5432:5432 -e POSTGRES_PASSWORD=123456 postgres:11.14
+#停止容器
+docker stop postgres-5432
+#删除容器
+docker rm postgres-5432
+
+# 端口: 5432
+# 用户名: postgres
+# 密码: 123456
+# 默认数据库: postgres
+```
+
+* 程序调用
+
+```go
+package main
+
+import (
+  "fmt"
+  "github.com/team-ide/go-driver/db_postgresql"
+  "testing"
+)
+
+func TestPostgresql(t *testing.T) {
+
+  dsn := db_postgresql.GetDSN("postgres", "123456", "127.0.0.1", 5432, "postgres")
+  db, err := db_postgresql.Open(dsn)
+  if err != nil {
+    panic(err)
+  }
+  sql := `select 2`
+  var count int
+  rows, err := db.Query(sql)
+  if err != nil {
+    panic(err)
+  }
+  rows.Next()
+  err = rows.Scan(&count)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Printf("result:%d\n", count)
+  if count == 2 {
+    fmt.Println("test success")
+  } else {
+    panic("test fail")
+  }
+}
+
 ```

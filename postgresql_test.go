@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/team-ide/go-driver/db_shentong"
+	"github.com/team-ide/go-driver/db_postgresql"
 	"testing"
 )
 
-func TestShenTong(t *testing.T) {
+func TestPostgresql(t *testing.T) {
 
-	dsn := db_shentong.GetDSN("SYSDBA", "szoscar55", "127.0.0.1", 2003, "OSRDB")
-	db, err := db_shentong.Open(dsn)
+	dsn := db_postgresql.GetDSN("postgres", "123456", "127.0.0.1", 5432, "postgres")
+	db, err := db_postgresql.Open(dsn)
 	if err != nil {
 		panic(err)
 	}

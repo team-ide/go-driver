@@ -1,32 +1,28 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"gitee.com/chunanyong/zorm"
 	"github.com/team-ide/go-driver/db_kingbase_v8r6"
 	"testing"
 )
 
 func TestKingBase(t *testing.T) {
-	//dbConfig := db_kingbase_v8r3.NewDataSourceConfig("SYSTEM", "123456", "127.0.0.1", 54321, "TEST")
-	dbConfig := db_kingbase_v8r6.NewDataSourceConfig("SYSTEM", "123456", "127.0.0.1", 54321, "TEST")
+	dsn := db_kingbase_v8r6.GetDSN("SYSTEM", "123456", "127.0.0.1", 54321, "TEST")
+	db, err := db_kingbase_v8r6.Open(dsn)
+	if err != nil {
+		panic(err)
+	}
 	sql := `select 2`
-	dbDao, err := zorm.NewDBDao(&dbConfig)
-	if err != nil {
-		panic(err)
-	}
-
-	cxt := context.Background()
-	cxt, err = dbDao.BindContextDBConnection(cxt)
-	if err != nil {
-		panic(err)
-	}
-	finder := zorm.NewFinder()
-	finder.Append(sql)
-
 	var count int
-	_, err = zorm.QueryRow(cxt, finder, &count)
+	rows, err := db.Query(sql)
+	if err != nil {
+		panic(err)
+	}
+	rows.Next()
+	err = rows.Scan(&count)
+	if err != nil {
+		panic(err)
+	}
 	fmt.Printf("result:%d\n", count)
 	if count == 2 {
 		fmt.Println("test success")

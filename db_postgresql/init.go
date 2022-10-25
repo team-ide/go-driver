@@ -1,22 +1,21 @@
-package db_kingbase_v8r6
+package db_postgresql
 
 import (
 	"database/sql"
 	"fmt"
-	//_ "github.com/lib/pq"
-	_ "github.com/team-ide/go-driver/driver/kingbase/v8r6/kingbase.com/gokb"
+	_ "github.com/lib/pq"
 )
 
 func GetDriverName() string {
-	return "v8r6-kingbase"
+	return "postgres"
 }
 
 func GetDialect() string {
-	return "kingbase"
+	return "postgresql"
 }
 
 func GetDSN(user string, password string, host string, port int, database string) string {
-	dsn := fmt.Sprintf("kingbase://%s:%s@%s:%d/%s?sslmode=disable", user, password, host, port, database)
+	dsn := fmt.Sprintf("postgresql://%s:%s@%s:%d/%s?sslmode=disable", user, password, host, port, database)
 	return dsn
 }
 
@@ -28,8 +27,8 @@ func Open(dsn string) (db *sql.DB, err error) {
 	return
 }
 
-//func NewDataSourceConfig(user string, password string, host string, port int, database string) zorm.DataSourceConfig {
-//	dsn := GetDSN(user, password, host, port, database)
+//func NewDataSourceConfig(user string, password string, host string, port int, sid string) zorm.DataSourceConfig {
+//	dsn := GetDSN(user, password, host, port, sid)
 //
 //	dbDaoConfig := zorm.DataSourceConfig{
 //		//DSN 数据库的连接字符串

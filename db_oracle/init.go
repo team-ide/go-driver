@@ -1,8 +1,8 @@
 package db_oracle
 
 import (
+	"database/sql"
 	"fmt"
-	"gitee.com/chunanyong/zorm"
 	//_ "github.com/mattn/go-oci8"
 	_ "github.com/godror/godror"
 )
@@ -13,6 +13,19 @@ func GetDriverName() string {
 
 func GetDialect() string {
 	return "oracle"
+}
+
+func GetDSN(user string, password string, host string, port int, sid string) string {
+	dsn := fmt.Sprintf("%s/%s@%s:%d/%s", user, password, host, port, sid)
+	return dsn
+}
+
+func Open(dsn string) (db *sql.DB, err error) {
+	db, err = sql.Open(GetDriverName(), dsn)
+	if err != nil {
+		return
+	}
+	return
 }
 
 /*
@@ -36,17 +49,18 @@ linux方案：
 3、重新登录系统 或 source ~/.bash_profile 使环境变量生效
 */
 
-func NewDataSourceConfig(user string, password string, host string, port int, sid string) zorm.DataSourceConfig {
-	//connStr := fmt.Sprintf("%s/%s@%s:%d/%s", user, password, host, port, sid)
-	connStr := fmt.Sprintf(`user="%s" password="%s" connectString="%s:%d/%s"`, user, password, host, port, sid)
-	dbDaoConfig := zorm.DataSourceConfig{
-		//DSN 数据库的连接字符串
-		DSN: connStr,
-		//数据库驱动名称:mysql,postgres,oci8,sqlserver,sqlite3,clickhouse,dm,kingbase,aci 和DBType对应,处理数据库有多个驱动
-		DriverName: GetDriverName(),
-		//数据库类型(方言判断依据):mysql,postgresql,oracle,mssql,sqlite,clickhouse,dm,kingbase,shentong 和 DriverName 对应,处理数据库有多个驱动
-		Dialect: GetDialect(),
-	}
-
-	return dbDaoConfig
-}
+//func NewDataSourceConfig(user string, password string, host string, port int, sid string) zorm.DataSourceConfig {
+//	//connStr := fmt.Sprintf("%s/%s@%s:%d/%s", user, password, host, port, sid)
+//	dsn := GetDSN(user, password, host, port, sid)
+//
+//	dbDaoConfig := zorm.DataSourceConfig{
+//		//DSN 数据库的连接字符串
+//		DSN: dsn,
+//		//数据库驱动名称:mysql,postgres,oci8,sqlserver,sqlite3,clickhouse,dm,kingbase,aci 和DBType对应,处理数据库有多个驱动
+//		DriverName: GetDriverName(),
+//		//数据库类型(方言判断依据):mysql,postgresql,oracle,mssql,sqlite,clickhouse,dm,kingbase,shentong 和 DriverName 对应,处理数据库有多个驱动
+//		Dialect: GetDialect(),
+//	}
+//
+//	return dbDaoConfig
+//}
