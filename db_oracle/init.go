@@ -16,7 +16,7 @@ func GetDialect() string {
 }
 
 func GetDSN(user string, password string, host string, port int, sid string) string {
-	dsn := fmt.Sprintf("oracle://%s/%s@%s:%d/%s", user, password, host, port, sid)
+	dsn := fmt.Sprintf("oracle://%s:%s@%s:%d/%s", user, password, host, port, sid)
 	return dsn
 }
 
