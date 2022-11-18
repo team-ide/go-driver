@@ -3,8 +3,10 @@ package db_oracle
 import (
 	"database/sql"
 	"fmt"
+	"github.com/godror/godror/dsn"
+
 	//_ "github.com/mattn/go-oci8"
-	_ "github.com/godror/godror"
+	godror "github.com/godror/godror"
 )
 
 func GetDriverName() string {
@@ -20,11 +22,18 @@ func GetDSN(user string, password string, host string, port int, sid string) str
 	return dsn
 }
 
-func Open(dsn string) (db *sql.DB, err error) {
-	db, err = sql.Open(GetDriverName(), dsn)
+func Open(dataSourceName string) (db *sql.DB, err error) {
+	driver := godror.NewDriver()
+	P, err := dsn.Parse(dataSourceName)
 	if err != nil {
 		return
 	}
+	connector := driver.NewConnector(P)
+	db = sql.OpenDB(connector)
+	//db, err = sql.Open(GetDriverName(), dataSourceName)
+	//if err != nil {
+	//	return
+	//}
 	return
 }
 
