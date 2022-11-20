@@ -70,8 +70,8 @@ jobs:
           go-version: "^1.18"
 
       - run: |
-          mkdir -p release/max
-          go build -o release/max/main
+          mkdir -p release/macos
+          go build -o release/macos/main
 
       # 上传共享资源
       - uses: actions/upload-artifact@v2
