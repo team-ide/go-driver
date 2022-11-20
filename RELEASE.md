@@ -1,17 +1,8 @@
-# 1.0.8
+# 1.1.0
 
-## Version 1.0.8 （2022/10/27）
+## Version 1.1.0 （2022/11/18）
 
 发布功能
 
-1. mysql驱动支持，添加测试
-2. 达梦驱动支持，添加测试
-3. 金仓驱动支持，添加测试
-   * 金仓数据库 bool 类型 修改为为返回 "0" 或 "1"
-   * 金仓数据库驱动添加v8r3-kingbase、v8r6-kingbase
-4. 神通驱动支持，添加测试
-5. sqlite3驱动支持，添加测试
-6. oracle驱动支持，添加测试
-7. postgresql驱动支持，添加测试
-
-**驱动包中添加Open方法，直接调用的sql.Open**
+1. oracle使用godror驱动
+2. oracle的Open方法，调用NewDriver、NewConnector，否则会使用godror的默认driver，导致无法关闭
