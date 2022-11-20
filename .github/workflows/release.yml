@@ -10,51 +10,74 @@ on:
 #    paths: [ "package.json" ]
 jobs:
 
-#  buildWindow:
-#    runs-on: windows-latest
-#    steps:
-#      # 下载源码
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#
-#      # 打包构建 Server
-#      - name: Build Server
-#        uses: actions/setup-go@v2
-#        with:
-#          go-version: "^1.18"
-#
-#      - run: |
-#          mkdir -p release/windows-amd64
-#          go build -o release/windows-amd64/main.exe .
-#
-#      # 上传共享资源
-#      - uses: actions/upload-artifact@v2
-#        with:
-#          name: release
-#          path: release
-#
-#  buildLinux:
-#    runs-on: ubuntu-latest
-#    steps:
-#      # 下载源码
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#
-#      # 打包构建 Server
-#      - name: Build Server
-#        uses: actions/setup-go@v2
-#        with:
-#          go-version: "^1.18"
-#
-#      - run: |
-#          mkdir -p release/linux-amd64
-#          GOOS=linux GOARCH=amd64 go build -o release/linux-amd64/main .
-#
-#      # 上传共享资源
-#      - uses: actions/upload-artifact@v2
-#        with:
-#          name: release
-#          path: release
+  buildWindow:
+    runs-on: windows-latest
+    steps:
+      # 下载源码
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 打包构建 Server
+      - name: Build Server
+        uses: actions/setup-go@v2
+        with:
+          go-version: "^1.18"
+
+      - run: |
+          mkdir -p release/windows
+          go build -o release/windows/main.exe
+
+      # 上传共享资源
+      - uses: actions/upload-artifact@v2
+        with:
+          name: release
+          path: release
+
+  buildLinux:
+    runs-on: ubuntu-latest
+    steps:
+      # 下载源码
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 打包构建 Server
+      - name: Build Server
+        uses: actions/setup-go@v2
+        with:
+          go-version: "^1.18"
+
+      - run: |
+          mkdir -p release/linux
+          go build -o release/linux/main
+
+      # 上传共享资源
+      - uses: actions/upload-artifact@v2
+        with:
+          name: release
+          path: release
+
+  buildMAC:
+    runs-on: macos-latest
+    steps:
+      # 下载源码
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 打包构建 Server
+      - name: Build Server
+        uses: actions/setup-go@v2
+        with:
+          go-version: "^1.18"
+
+      - run: |
+          mkdir -p release/max
+          go build -o release/max/main
+
+      # 上传共享资源
+      - uses: actions/upload-artifact@v2
+        with:
+          name: release
+          path: release
 
 
   release:
