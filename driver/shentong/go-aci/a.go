@@ -7,5 +7,6 @@ package aci
 // #cgo mips64le LDFLAGS: -Llib/loongson64  -laci
 // #cgo amd64 && linux LDFLAGS: -Llib/linux64  -laci
 // #cgo amd64 && windows LDFLAGS: -Llib/win64  -laci
+// #cgo amd64 && macos LDFLAGS: -Llib/mac  -laci
 // #include "aci.go.h"
 import "C"
