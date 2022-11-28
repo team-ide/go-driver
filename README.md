@@ -114,7 +114,7 @@ func TestSqlite3(t *testing.T) {
 
 ```shell
 # 下载镜像
-docker pull teamide/dm:v201106
+docker pull teamide/dm8:v201106
 #运行一个容器
 docker run -itd --name dm-5236 -p 5236:5236 teamide/dm8:v201106
 #停止容器
