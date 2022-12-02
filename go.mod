@@ -4,10 +4,12 @@ go 1.18
 
 require (
 	gitee.com/chunanyong/dm v1.8.9
+	github.com/go-ole/go-ole v1.2.6
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/godror/godror v0.35.1
 	github.com/lib/pq v1.10.7
 	github.com/mattn/go-sqlite3 v1.14.16
+	golang.org/x/sys v0.2.0
 )
 
 require (
