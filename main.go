@@ -7,6 +7,7 @@ import (
 	"github.com/team-ide/go-driver/db_dm"
 	"github.com/team-ide/go-driver/db_kingbase_v8r6"
 	"github.com/team-ide/go-driver/db_mysql"
+	"github.com/team-ide/go-driver/db_odbc"
 	"github.com/team-ide/go-driver/db_oracle"
 	"github.com/team-ide/go-driver/db_postgresql"
 	"github.com/team-ide/go-driver/db_shentong"
@@ -30,7 +31,7 @@ func main() {
 		println("请输入 数据库类型")
 		return
 	}
-	if *dbType != "sqlite3" {
+	if *dbType != "sqlite3" && *dbType != "odbc" {
 		if *host == "" {
 			println("请输入 数据库Host")
 			return
@@ -82,6 +83,11 @@ func main() {
 	case "postgresql":
 		dsn := db_postgresql.GetDSN(*user, *password, *host, *port, *database)
 		db, err = db_postgresql.Open(dsn)
+		sqlInfo = `select 2`
+		break
+	case "odbc":
+		dsn := db_odbc.GetDSN(*database, *user, *password)
+		db, err = db_odbc.Open(dsn)
 		sqlInfo = `select 2`
 		break
 	}
