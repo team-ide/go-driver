@@ -11,11 +11,11 @@ func GetDriverName() string {
 }
 
 func GetDialect() string {
-	return "gbase"
+	return "odbc"
 }
 
-func GetDSN(database string, user string, password string) string {
-	dsn := fmt.Sprintf("DSN=%s;UID=%s;PWD=%s", database, user, password)
+func GetDSN(odbcName string, user string, password string) string {
+	dsn := fmt.Sprintf("DSN=%s;UID=%s;PWD=%s", odbcName, user, password)
 	return dsn
 }
 
