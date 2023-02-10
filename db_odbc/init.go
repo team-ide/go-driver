@@ -15,7 +15,7 @@ func GetDialect() string {
 }
 
 func GetDSN(odbcName string, user string, password string) string {
-	dsn := fmt.Sprintf("DSN=%s;UID=%s;PWD=%s", odbcName, user, password)
+	dsn := fmt.Sprintf("DSN=%s;UID=%s;PWD=%s;", odbcName, user, password)
 	return dsn
 }
 

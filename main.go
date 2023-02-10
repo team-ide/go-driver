@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/team-ide/go-driver/db_dm"
+	"github.com/team-ide/go-driver/db_gbase"
 	"github.com/team-ide/go-driver/db_kingbase_v8r6"
 	"github.com/team-ide/go-driver/db_mysql"
 	"github.com/team-ide/go-driver/db_odbc"
@@ -84,6 +85,11 @@ func main() {
 		dsn := db_postgresql.GetDSN(*user, *password, *host, *port, *database)
 		db, err = db_postgresql.Open(dsn)
 		sqlInfo = `select 2`
+		break
+	case "gbase":
+		dsn := db_gbase.GetDSN(*database, *user, *password, "")
+		db, err = db_gbase.Open(dsn)
+		sqlInfo = `select 2 from dual`
 		break
 	case "odbc":
 		dsn := db_odbc.GetDSN(*database, *user, *password)

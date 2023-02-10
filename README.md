@@ -5,6 +5,7 @@ Go数据库驱动
 * [达梦](#达梦)
 * [金仓](#金仓)
 * [神通](#神通)
+* [GBase](#GBase)
 * [Sqlite3](#Sqlite3)
 * [Oracle](#Oracle)
 * [Postgresql](#Postgresql)
@@ -440,5 +441,86 @@ func TestPostgresql(t *testing.T) {
     panic("test fail")
   }
 }
+
+```
+
+
+
+
+## GBase
+
+* Docker 运行GBase数据库
+
+```shell
+# 下载镜像
+docker pull teamide/gbase8s:3.3.0_2_amd64
+#运行一个容器
+docker run -itd --name gbase-9088 -p 9088:9088 teamide/gbase8s:3.3.0_2_amd64
+#停止容器
+docker stop gbase-9088
+#删除容器
+docker rm gbase-9088
+
+# 端口: 9088
+# 用户名: gbasedbt
+# 密码: GBase123
+# 默认数据库: OSRDB
+```
+
+* GBase 相关资源文档
+  * https://gbasedbt.com/dl/
+  * https://gbasedbt.com/dl/odbc/
+  * https://gbasedbt.com/dl/Demo4GBase8s/
+
+* window 配置 odbc
+
+```shell
+
+# 下载 https://gbasedbt.com/dl/odbc/GBase8s_3.0-Win64-ODBC-Driver.zip
+
+# 解压
+# 使用管理员权限运行00注册ODBC_管理员权限运行.cmd，注册ODBC驱动
+
+# 打开window odbc配置，添加GBase驱动
+
+
+```
+
+* 程序调用
+
+```go
+package main
+
+import (
+  "fmt"
+  "github.com/team-ide/go-driver/db_gbase"
+  "testing"
+)
+
+func TestGBase(t *testing.T) {
+  dsn := db_gbase.GetDSN("gbase", "gbasedbt", "GBase123", "")
+  db, err := db_gbase.Open(dsn)
+  if err != nil {
+    panic(err)
+  }
+  sql := `select 2 from dual`
+  var count int
+  rows, err := db.Query(sql)
+  if err != nil {
+    panic(err)
+  }
+  rows.Next()
+  err = rows.Scan(&count)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Printf("result:%d\n", count)
+  if count == 2 {
+    fmt.Println("test success")
+  } else {
+    panic("test fail")
+  }
+}
+
 
 ```
