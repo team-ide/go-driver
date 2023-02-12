@@ -19,6 +19,8 @@ func GetDSN(odbcName string, user string, password string, databaseName string) 
 	if databaseName != "" {
 		dsn += fmt.Sprintf("DATABASE=%s;", databaseName)
 	}
+	//dsn += `host=127.0.0.1`
+	//dsn += "service=9088;"
 	return dsn
 }
 
