@@ -15,7 +15,7 @@ func GetDialect() string {
 }
 
 func GetDSN(odbcName string, user string, password string, databaseName string) string {
-	dsn := fmt.Sprintf("DSN=%s;UID=%s;PWD=%s;NEWCODESET=UTF8,zh_cn.UTF8,57372;DB_LOCALE=zh_cn.57372;DELIMIDENT=Y;SQLMODE=oracle;", odbcName, user, password)
+	dsn := fmt.Sprintf("DSN=%s;UID=%s;PWD=%s;NEWCODESET=UTF8,zh_cn.UTF8,57372;DB_LOCALE=zh_cn.57372;DELIMIDENT=Y;", odbcName, user, password)
 	if databaseName != "" {
 		dsn += fmt.Sprintf("DATABASE=%s;", databaseName)
 	}
