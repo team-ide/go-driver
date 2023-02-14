@@ -4,6 +4,7 @@
 
 package odbc
 
+import "C"
 import (
 	"database/sql/driver"
 	"errors"
@@ -69,12 +70,14 @@ func NewColumn(h api.SQLHSTMT, idx int) (Column, error) {
 		name:    api.UTF16ToString(namebuf[:namelen]),
 		SQLType: sqltype,
 	}
+	// gbase8s的bigint类型的column type
+	var SQL_GBASE8S_BIGINT api.SQLSMALLINT = -114
 	switch sqltype {
 	case api.SQL_BIT:
 		return NewBindableColumn(b, api.SQL_C_BIT, 1), nil
 	case api.SQL_TINYINT, api.SQL_SMALLINT, api.SQL_INTEGER:
 		return NewBindableColumn(b, api.SQL_C_LONG, 4), nil
-	case api.SQL_BIGINT:
+	case api.SQL_BIGINT, SQL_GBASE8S_BIGINT:
 		return NewBindableColumn(b, api.SQL_C_SBIGINT, 8), nil
 	case api.SQL_NUMERIC, api.SQL_DECIMAL, api.SQL_FLOAT, api.SQL_REAL, api.SQL_DOUBLE:
 		return NewBindableColumn(b, api.SQL_C_DOUBLE, 8), nil

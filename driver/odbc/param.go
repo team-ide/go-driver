@@ -4,6 +4,7 @@
 
 package odbc
 
+import "C"
 import (
 	"database/sql/driver"
 	"fmt"
@@ -69,6 +70,9 @@ func (p *Parameter) BindValue(h api.SQLHSTMT, idx int, v driver.Value, conn *Con
 			case size >= 4000:
 				sqltype = api.SQL_WLONGVARCHAR
 			case p.isDescribed:
+				if p.Size != 0 {
+					size = p.Size
+				}
 				sqltype = p.SQLType
 			case size <= 1:
 				sqltype = api.SQL_WVARCHAR
@@ -99,15 +103,16 @@ func (p *Parameter) BindValue(h api.SQLHSTMT, idx int, v driver.Value, conn *Con
 			size = 8
 		}
 	case bool:
-		var b byte
+		// 将boolean转为int类型
+		var b int32
 		if d {
 			b = 1
 		}
-		ctype = api.SQL_C_BIT
+		ctype = api.SQL_C_LONG
 		p.Data = &b
 		buf = unsafe.Pointer(&b)
-		sqltype = api.SQL_BIT
-		size = 1
+		sqltype = api.SQL_INTEGER
+		size = 4
 	case float64:
 		ctype = api.SQL_C_DOUBLE
 		p.Data = &d
