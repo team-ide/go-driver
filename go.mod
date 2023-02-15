@@ -3,7 +3,7 @@ module github.com/team-ide/go-driver
 go 1.18
 
 require (
-	gitee.com/chunanyong/dm v1.8.11
+	gitee.com/chunanyong/dm v1.8.10
 	github.com/go-ole/go-ole v1.2.6
 	github.com/go-sql-driver/mysql v1.7.0
 	github.com/godror/godror v0.36.0
