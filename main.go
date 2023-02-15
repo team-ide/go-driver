@@ -22,6 +22,7 @@ var (
 	user     = flag.String("u", "", "数据库登录用户")
 	password = flag.String("P", "", "数据库登录密码")
 	database = flag.String("d", "", "数据库模式名称")
+	odbcDsn  = flag.String("dsn", "", "ODBC DSN")
 )
 
 func main() {
@@ -32,7 +33,7 @@ func main() {
 		println("请输入 数据库类型")
 		return
 	}
-	if *dbType != "sqlite3" && *dbType != "odbc" {
+	if *dbType != "sqlite3" && *dbType != "odbc" && *dbType != "gbase" {
 		if *host == "" {
 			println("请输入 数据库Host")
 			return
@@ -42,8 +43,13 @@ func main() {
 			return
 		}
 		if *user == "" {
-			flag.PrintDefaults()
 			println("请输入 数据库登录用户")
+			return
+		}
+	}
+	if *dbType == "odbc" || *dbType == "gbase" {
+		if *odbcDsn == "" {
+			println("请输入 ODBC DSN")
 			return
 		}
 	}
@@ -87,12 +93,12 @@ func main() {
 		sqlInfo = `select 2`
 		break
 	case "gbase":
-		dsn := db_gbase.GetDSN(*database, *user, *password, "")
+		dsn := *odbcDsn
 		db, err = db_gbase.Open(dsn)
 		sqlInfo = `select 2 from dual`
 		break
 	case "odbc":
-		dsn := db_odbc.GetDSN(*database, *user, *password)
+		dsn := *odbcDsn
 		db, err = db_odbc.Open(dsn)
 		sqlInfo = `select 2`
 		break

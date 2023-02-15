@@ -498,7 +498,7 @@ import (
 )
 
 func TestGBase(t *testing.T) {
-  dsn := db_gbase.GetDSN("gbase", "gbasedbt", "GBase123", "")
+  dsn := `DRIVER=com.gbasebt.jdbc.Driver;NEWCODESET=UTF8,zh_cn.UTF8,57372;DB_LOCALE=zh_cn.57372;DELIMIDENT=Y;CLIENT_LOCALE=zh_cn.57372;ServerName=gbase01;host=127.0.0.1;service=9088;uid=gbasedbt;pwd=GBase123;DATABASE=VRV_JOB1;`
   db, err := db_gbase.Open(dsn)
   if err != nil {
     panic(err)
@@ -521,6 +521,5 @@ func TestGBase(t *testing.T) {
     panic("test fail")
   }
 }
-
 
 ```
