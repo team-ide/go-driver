@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	gitee.com/chunanyong/dm v1.8.10
+	gitee.com/opengauss/openGauss-connector-go-pq v1.0.4
 	github.com/go-ole/go-ole v1.2.6
 	github.com/go-sql-driver/mysql v1.7.0
 	github.com/godror/godror v0.36.0
@@ -13,7 +14,6 @@ require (
 )
 
 require (
-	gitee.com/opengauss/openGauss-connector-go-pq v1.0.4 // indirect
 	github.com/go-logfmt/logfmt v0.5.1 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
 	github.com/godror/knownpb v0.1.0 // indirect
