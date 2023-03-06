@@ -9,6 +9,7 @@ Go数据库驱动
 * [Sqlite3](#Sqlite3)
 * [Oracle](#Oracle)
 * [Postgresql](#Postgresql)
+* [OpenGauss](#OpenGauss)
   
 ## 编译
 
@@ -521,5 +522,70 @@ func TestGBase(t *testing.T) {
     panic("test fail")
   }
 }
+
+```
+
+## OpenGauss
+
+* Docker 运行GBase数据库
+
+```shell
+# 下载镜像
+docker pull enmotech/opengauss:3.1.0
+# 运行一个容器
+docker run -itd --name opengauss-5432 -p 5432:5432 -e GS_PASSWORD=Enmo@1234 enmotech/opengauss:3.1.0
+
+# GS_PASSWORD：设置openGauss数据库的超级用户omm以及测试用户gaussdb的密码。如果要从容器外部（其它主机或者其它容器）连接则必须要输入密码。包含大写、小写、数字、特殊字符和密码长度（最小8）
+# GS_NODENAME：数据库节点名称，默认为gaussdb。
+# GS_USERNAME：数据库连接用户名，默认为gaussdb。
+# GS_PORT：数据库端口，默认为5432
+
+#停止容器
+docker stop opengauss-5432
+#删除容器
+docker rm opengauss-5432
+
+# 端口: 5432
+# 用户名: gaussdb
+# 密码: Enmo@1234
+# 默认数据库: postgres
+```
+
+* 程序调用
+
+```go
+package db_opengauss
+
+import (
+  "fmt"
+  "testing"
+)
+
+func TestDb(t *testing.T) {
+
+  dsn := GetDSN("gaussdb", "Enmo@1234", "127.0.0.1", 5432, "postgres")
+  db, err := Open(dsn)
+  if err != nil {
+    panic(err)
+  }
+  sql := `select 2`
+  var count int
+  rows, err := db.Query(sql)
+  if err != nil {
+    panic(err)
+  }
+  rows.Next()
+  err = rows.Scan(&count)
+  if err != nil {
+    panic(err)
+  }
+  fmt.Printf("result:%d\n", count)
+  if count == 2 {
+    fmt.Println("test success")
+  } else {
+    panic("test fail")
+  }
+}
+
 
 ```

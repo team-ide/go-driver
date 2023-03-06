@@ -9,6 +9,7 @@ import (
 	"github.com/team-ide/go-driver/db_kingbase_v8r6"
 	"github.com/team-ide/go-driver/db_mysql"
 	"github.com/team-ide/go-driver/db_odbc"
+	"github.com/team-ide/go-driver/db_opengauss"
 	"github.com/team-ide/go-driver/db_oracle"
 	"github.com/team-ide/go-driver/db_postgresql"
 	"github.com/team-ide/go-driver/db_shentong"
@@ -100,6 +101,11 @@ func main() {
 	case "odbc":
 		dsn := *odbcDsn
 		db, err = db_odbc.Open(dsn)
+		sqlInfo = `select 2`
+		break
+	case "opengauss":
+		dsn := db_opengauss.GetDSN(*user, *password, *host, *port, *database)
+		db, err = db_opengauss.Open(dsn)
 		sqlInfo = `select 2`
 		break
 	}

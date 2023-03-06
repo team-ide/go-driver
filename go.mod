@@ -13,10 +13,14 @@ require (
 )
 
 require (
+	gitee.com/opengauss/openGauss-connector-go-pq v1.0.4 // indirect
 	github.com/go-logfmt/logfmt v0.5.1 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
 	github.com/godror/knownpb v0.1.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
-	golang.org/x/text v0.3.2 // indirect
+	github.com/tjfoc/gmsm v1.4.1 // indirect
+	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
+	golang.org/x/text v0.3.3 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 )
