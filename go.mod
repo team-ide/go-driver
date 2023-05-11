@@ -1,6 +1,6 @@
 module github.com/team-ide/go-driver
 
-go 1.17
+go 1.18
 
 require (
 	gitee.com/chunanyong/dm v1.8.10
