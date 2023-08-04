@@ -10,7 +10,7 @@ require (
 	github.com/godror/godror v0.37.0
 	github.com/lib/pq v1.10.7
 	github.com/mattn/go-sqlite3 v1.14.16
-	golang.org/x/sys v0.8.0
+	golang.org/x/sys v0.6.0
 )
 
 require (
@@ -19,7 +19,7 @@ require (
 	github.com/godror/knownpb v0.1.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/tjfoc/gmsm v1.4.1 // indirect
-	golang.org/x/crypto v0.9.0 // indirect
+	golang.org/x/crypto v0.7.0 // indirect
 	golang.org/x/sync v0.2.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
