@@ -2,8 +2,8 @@ package aci
 
 /*
 #cgo CFLAGS: -Iinclude
-#cgo LDFLAGS: -Llib -laci
-#cgo amd64 && windows LDFLAGS: -Llib/win64  -laci
+#cgo LDFLAGS: -L./lib -laci  -ldl
+#cgo amd64 && windows LDFLAGS: -L./lib/win64  -laci  -ldl
 #include "aci.go.h"
 */
 import "C"
