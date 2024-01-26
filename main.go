@@ -69,7 +69,7 @@ func main() {
 		sqlInfo = `select 2`
 		break
 	case "dm":
-		dsn := db_dm.GetDSN(*user, *password, *host, *port)
+		dsn := db_dm.GetDSN(*user, *password, *host, *port, *database)
 		db, err = db_dm.Open(dsn)
 		sqlInfo = `select 2`
 		break

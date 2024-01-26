@@ -14,8 +14,11 @@ func GetDialect() string {
 	return "dm"
 }
 
-func GetDSN(user string, password string, host string, port int) string {
+func GetDSN(user string, password string, host string, port int, schema string) string {
 	dsn := fmt.Sprintf("dm://%s:%s@%s:%d?charset=utf8", user, password, host, port)
+	if schema != "" {
+		dsn += "&schema=" + schema
+	}
 	return dsn
 }
 

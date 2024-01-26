@@ -7,7 +7,7 @@ import (
 )
 
 func TestDm(t *testing.T) {
-	dsn := db_dm.GetDSN("SYSDBA", "SYSDBA", "127.0.0.1", 5236)
+	dsn := db_dm.GetDSN("SYSDBA", "SYSDBA", "127.0.0.1", 5236, "")
 	db, err := db_dm.Open(dsn)
 	if err != nil {
 		panic(err)
