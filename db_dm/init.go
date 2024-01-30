@@ -3,7 +3,7 @@ package db_dm
 import (
 	"database/sql"
 	"fmt"
-	_ "gitee.com/chunanyong/dm"
+	_ "github.com/team-ide/go-driver/driver/dm"
 )
 
 func GetDriverName() string {
