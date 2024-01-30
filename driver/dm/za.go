@@ -100,9 +100,11 @@ func newDmError(errCode int32, errText string) *DmError {
 }
 
 func (dmError *DmError) throw() *DmError {
-	var pcs [32]uintptr
-	n := runtime.Callers(2, pcs[:])
-	dmError.stack = pcs[0:n]
+	// 去除堆栈信息
+
+	//var pcs [32]uintptr
+	//n := runtime.Callers(2, pcs[:])
+	//dmError.stack = pcs[0:n]
 	return dmError
 }
 
@@ -128,7 +130,10 @@ func (dmError *DmError) getErrText() string {
 }
 
 func (dmError *DmError) Error() string {
-	return fmt.Sprintf("Error %d: %s", dmError.ErrCode, dmError.getErrText()) + dmError.detail + "\n" + "stack info:\n" + dmError.FormatStack()
+	//return fmt.Sprintf("Error %d: %s", dmError.ErrCode, dmError.getErrText()) + dmError.detail + "\n" + "stack info:\n" + dmError.FormatStack()
+
+	// 去除堆栈信息打印
+	return fmt.Sprintf("Error %d: %s", dmError.ErrCode, dmError.getErrText()) + dmError.detail
 }
 
 // 扩充ErrText
