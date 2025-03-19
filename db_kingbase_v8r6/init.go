@@ -3,6 +3,8 @@ package db_kingbase_v8r6
 import (
 	"database/sql"
 	"fmt"
+	"net/url"
+
 	//_ "github.com/lib/pq"
 	_ "github.com/team-ide/go-driver/driver/kingbase/v8r6/kingbase.com/gokb"
 )
@@ -16,6 +18,7 @@ func GetDialect() string {
 }
 
 func GetDSN(user string, password string, host string, port int, database string) string {
+	password = url.PathEscape(password)
 	dsn := fmt.Sprintf("kingbase://%s:%s@%s:%d/%s?sslmode=disable", user, password, host, port, database)
 	return dsn
 }

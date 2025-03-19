@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/godror/godror/dsn"
+	"net/url"
 
 	//_ "github.com/mattn/go-oci8"
 	godror "github.com/godror/godror"
@@ -18,8 +19,9 @@ func GetDialect() string {
 }
 
 func GetDSN(user string, password string, host string, port int, sid string) string {
-	dsn := fmt.Sprintf("oracle://%s:%s@%s:%d/%s", user, password, host, port, sid)
-	return dsn
+	password = url.PathEscape(password)
+	res := fmt.Sprintf("oracle://%s:%s@%s:%d/%s", user, password, host, port, sid)
+	return res
 }
 
 func Open(dataSourceName string) (db *sql.DB, err error) {

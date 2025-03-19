@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
+	"net/url"
 )
 
 func GetDriverName() string {
@@ -15,6 +16,7 @@ func GetDialect() string {
 }
 
 func GetDSN(user string, password string, host string, port int, database string) string {
+	password = url.PathEscape(password)
 	dsn := fmt.Sprintf("postgresql://%s:%s@%s:%d/%s?sslmode=disable", user, password, host, port, database)
 	return dsn
 }

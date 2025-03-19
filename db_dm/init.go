@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/team-ide/go-driver/driver/dm"
+	"net/url"
 )
 
 func GetDriverName() string {
@@ -19,6 +20,7 @@ func GetDSN(user string, password string, host string, port int, schema string) 
 	if port > 0 {
 		address = fmt.Sprintf("%s:%d", host, port)
 	}
+	password = url.PathEscape(password)
 	dsn := fmt.Sprintf("dm://%s:%s@%s?charset=utf8", user, password, address)
 	if schema != "" {
 		dsn += "&schema=" + schema
