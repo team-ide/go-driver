@@ -1,7 +1,9 @@
-# 1.1.9
+# 1.3.6
 
-## Version 1.1.9（2023/3/6）
+## Version 1.3.6（2025/3/20）
 
 发布功能
 
-1. 添加OpenGauss支持，驱动使用`gitee.com/opengauss/openGauss-connector-go-pq`
+* 达梦、金仓、Oracle、神通、优旋 、Postgresql 
+  * 添加数据库密码编码，支持特殊字符密码传递
+* dm 数据库驱动升级
