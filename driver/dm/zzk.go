@@ -181,22 +181,22 @@ func next(lvalList []*parser.LVal, start int) *parser.LVal {
 	return lval
 }
 
-func (dc *DmConnection) execOpt(sql string, optParamList []OptParameter, serverEncoding string) (string, []OptParameter, error) {
+func (dc *DmConnection) execOpt(sql string, optParamList []OptParameter, serverEncoding string, backSlashFlag bool) (string, []OptParameter, error) {
 	nsql := bytes.NewBufferString("")
 
 	lvalList, err := dc.lex(sql)
 	if err != nil {
-		return "", optParamList, err
+		return sql, nil, err
 	}
 
 	if nil == lvalList || len(lvalList) == 0 {
-		return sql, optParamList, nil
+		return sql, nil, nil
 	}
 
 	firstWord := lvalList[0].Value
 	if !(util.StringUtil.EqualsIgnoreCase(firstWord, "INSERT") || util.StringUtil.EqualsIgnoreCase(firstWord, "SELECT") ||
 		util.StringUtil.EqualsIgnoreCase(firstWord, "UPDATE") || util.StringUtil.EqualsIgnoreCase(firstWord, "DELETE")) {
-		return sql, optParamList, nil
+		return sql, nil, nil
 	}
 
 	breakIndex := 0
@@ -213,7 +213,7 @@ func (dc *DmConnection) execOpt(sql string, optParamList []OptParameter, serverE
 				nsql.WriteString("?")
 				value, err := strconv.Atoi(lval.Value)
 				if err != nil {
-					return "", optParamList, err
+					return sql, nil, err
 				}
 
 				if value <= int(INT32_MAX) && value >= int(INT32_MIN) {
@@ -228,7 +228,7 @@ func (dc *DmConnection) execOpt(sql string, optParamList []OptParameter, serverE
 				nsql.WriteString("?")
 				f, err := strconv.ParseFloat(lval.Value, 64)
 				if err != nil {
-					return "", optParamList, err
+					return sql, nil, err
 				}
 
 				optParamList = append(optParamList, newOptParameter(G2DB.toFloat64(f), DOUBLE, DOUBLE_PREC))
@@ -236,9 +236,9 @@ func (dc *DmConnection) execOpt(sql string, optParamList []OptParameter, serverE
 		case parser.DECIMAL:
 			{
 				nsql.WriteString("?")
-				bytes, err := G2DB.toDecimal(lval.Value, 0, 0)
+				bytes, err := G2DB.toDecimal(lval.Value)
 				if err != nil {
-					return "", optParamList, err
+					return sql, nil, err
 				}
 				optParamList = append(optParamList, newOptParameter(bytes, DECIMAL, 0))
 			}
@@ -250,7 +250,11 @@ func (dc *DmConnection) execOpt(sql string, optParamList []OptParameter, serverE
 					nsql.WriteString("'" + util.StringUtil.ProcessSingleQuoteOfName(lval.Value) + "'")
 				} else {
 					nsql.WriteString("?")
-					optParamList = append(optParamList, newOptParameter(Dm_build_1331.Dm_build_1547(lval.Value, serverEncoding, dc), VARCHAR, VARCHAR_PREC))
+
+					if backSlashFlag {
+						lval.Value = util.StringUtil.Translate(lval.Value)
+					}
+					optParamList = append(optParamList, newOptParameter(Dm_build_1265.Dm_build_1481(lval.Value, serverEncoding, dc), VARCHAR, VARCHAR_PREC))
 				}
 			}
 		case parser.HEX_INT:
