@@ -4,7 +4,6 @@
 
 package odbc
 
-import "C"
 import (
 	"database/sql/driver"
 	"fmt"
@@ -70,9 +69,6 @@ func (p *Parameter) BindValue(h api.SQLHSTMT, idx int, v driver.Value, conn *Con
 			case size >= 4000:
 				sqltype = api.SQL_WLONGVARCHAR
 			case p.isDescribed:
-				if p.Size != 0 {
-					size = p.Size
-				}
 				sqltype = p.SQLType
 			case size <= 1:
 				sqltype = api.SQL_WVARCHAR
@@ -83,6 +79,9 @@ func (p *Parameter) BindValue(h api.SQLHSTMT, idx int, v driver.Value, conn *Con
 			// MS Acess requires SQL_WLONGVARCHAR for MEMO.
 			// https://docs.microsoft.com/en-us/sql/odbc/microsoft/microsoft-access-data-types
 			sqltype = api.SQL_WLONGVARCHAR
+		}
+		if p.isDescribed && p.Size > 0 {
+			size = p.Size
 		}
 	case int64:
 		if -0x80000000 < d && d < 0x7fffffff {
@@ -103,16 +102,15 @@ func (p *Parameter) BindValue(h api.SQLHSTMT, idx int, v driver.Value, conn *Con
 			size = 8
 		}
 	case bool:
-		// 将boolean转为int类型
-		var b int32
+		var b byte
 		if d {
 			b = 1
 		}
-		ctype = api.SQL_C_LONG
+		ctype = api.SQL_C_BIT
 		p.Data = &b
 		buf = unsafe.Pointer(&b)
-		sqltype = api.SQL_INTEGER
-		size = 4
+		sqltype = api.SQL_BIT
+		size = 1
 	case float64:
 		ctype = api.SQL_C_DOUBLE
 		p.Data = &d
@@ -147,7 +145,11 @@ func (p *Parameter) BindValue(h api.SQLHSTMT, idx int, v driver.Value, conn *Con
 		b := make([]byte, len(d))
 		copy(b, d)
 		p.Data = b
-		buf = unsafe.Pointer(&b[0])
+		if len(d) > 0 {
+			buf = unsafe.Pointer(&b[0])
+		} else {
+			buf = nil
+		}
 		buflen = api.SQLLEN(len(b))
 		plen = p.StoreStrLen_or_IndPtr(buflen)
 		size = api.SQLULEN(len(b))
@@ -160,6 +162,9 @@ func (p *Parameter) BindValue(h api.SQLHSTMT, idx int, v driver.Value, conn *Con
 			sqltype = api.SQL_LONGVARBINARY
 		default:
 			sqltype = api.SQL_BINARY
+		}
+		if p.isDescribed && p.Size > 0 {
+			size = p.Size
 		}
 	default:
 		return fmt.Errorf("unsupported type %T", v)

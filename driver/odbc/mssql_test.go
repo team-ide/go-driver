@@ -6,6 +6,7 @@ package odbc
 
 import (
 	"bytes"
+	"context"
 	"database/sql"
 	"database/sql/driver"
 	"errors"
@@ -671,6 +672,10 @@ var typeMSSpecificTests = []typeTest{
 	{"select cast(N'\u0421\u0430\u0448\u0430' as nvarchar(5))", match([]byte("\u0421\u0430\u0448\u0430"))},
 	{"select cast(N'\u0421\u0430\u0448\u0430' as nvarchar(max))", match([]byte("\u0421\u0430\u0448\u0430"))},
 	{"select cast(N'\u0421\u0430\u0448\u0430' as ntext)", match([]byte("\u0421\u0430\u0448\u0430"))},
+	{"select cast(N'Саша' as nvarchar(max))", match([]byte("Саша"))},
+	{"select cast(N'你好世界' as nvarchar(21))", match([]byte("你好世界"))},
+	{"select cast(N'Γεια σου κόσμε' as nvarchar(21))", match([]byte("Γεια σου κόσμε"))},
+	{"select cast(N'Hello, 世界' as nvarchar(max))", match([]byte("Hello, 世界"))},
 }
 
 var typeMSSQL2008Tests = []typeTest{
@@ -1256,6 +1261,12 @@ var paramTypeTests = []struct {
 	{"4001 large string value", "text", strings.Repeat("a", 4001)},
 	{"4001 large unicode string value", "ntext", strings.Repeat("\u0421", 4001)},
 	{"very large string value", "text", strings.Repeat("a", 10000)},
+	{"unicode with russian letters", "nvarchar(10)", "\u0421\u0430\u0448\u0430"},
+	{"unicode with russian letters", "nvarchar(max)", "\u0421\u0430\u0448\u0430"},
+	{"unicode with russian letters", "ntext", "Саша"},
+	{"unicode with chinese letters", "nvarchar(max)", "Hello, 世界"},
+	{"unicode with chinese letters", "nvarchar(21)", "你好世界"},
+	{"unicode with greek letters", "nvarchar(21)", "Γεια σου κόσμε"},
 	// datetime
 	{"datetime overflow", "datetime", time.Date(2013, 9, 9, 14, 07, 15, 123e6, time.Local)},
 	// binary blobs
@@ -1915,5 +1926,55 @@ IF @@ROWCOUNT = 0
 
 	if err = tx.Commit(); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestMSSQLQueryContextTimeout(t *testing.T) {
+	db, sc, err := mssqlConnect()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer closeDB(t, db, sc, sc)
+
+	contextTimeout := time.Millisecond * 500
+	queryWaitFor := time.Second * 1
+
+	ctx, cancel := context.WithTimeout(context.Background(), contextTimeout)
+	defer cancel()
+
+	start := time.Now()
+	_, err = db.QueryContext(ctx, "WAITFOR DELAY '00:01';")
+	elapsed := time.Since(start)
+
+	if err == nil {
+		t.Fatal("Unexpected success, expected error")
+	}
+	if err != context.DeadlineExceeded {
+		t.Fatalf("Unexpected error value: should=%s, is=%s", context.DeadlineExceeded, err)
+	}
+	if elapsed > queryWaitFor {
+		t.Fatalf("Unexpected query duration: should=>%s, is=%s", queryWaitFor, elapsed)
+	}
+	if elapsed < contextTimeout {
+		t.Fatalf("Query did not delay: should=<%s, is=%s", contextTimeout, elapsed)
+	}
+}
+func TestMSSQLQueryContextCancel(t *testing.T) {
+	db, sc, err := mssqlConnect()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer closeDB(t, db, sc, sc)
+
+	ctx, cancel := context.WithCancel(context.Background())
+
+	cancel()
+	_, err = db.QueryContext(ctx, "WAITFOR DELAY '00:01';")
+
+	if err == nil {
+		t.Fatal("Unexpected success, expected error")
+	}
+	if err != context.Canceled {
+		t.Fatalf("Unexpected error value: should=%s, is=%s", context.Canceled, err)
 	}
 }

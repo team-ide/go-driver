@@ -4,7 +4,6 @@
 
 package odbc
 
-import "C"
 import (
 	"database/sql/driver"
 	"errors"
@@ -70,14 +69,12 @@ func NewColumn(h api.SQLHSTMT, idx int) (Column, error) {
 		name:    api.UTF16ToString(namebuf[:namelen]),
 		SQLType: sqltype,
 	}
-	// gbase8s的bigint类型的column type
-	var SQL_GBASE8S_BIGINT api.SQLSMALLINT = -114
 	switch sqltype {
 	case api.SQL_BIT:
 		return NewBindableColumn(b, api.SQL_C_BIT, 1), nil
 	case api.SQL_TINYINT, api.SQL_SMALLINT, api.SQL_INTEGER:
 		return NewBindableColumn(b, api.SQL_C_LONG, 4), nil
-	case api.SQL_BIGINT, SQL_GBASE8S_BIGINT:
+	case api.SQL_BIGINT:
 		return NewBindableColumn(b, api.SQL_C_SBIGINT, 8), nil
 	case api.SQL_NUMERIC, api.SQL_DECIMAL, api.SQL_FLOAT, api.SQL_REAL, api.SQL_DOUBLE:
 		return NewBindableColumn(b, api.SQL_C_DOUBLE, 8), nil
@@ -293,8 +290,17 @@ loop:
 			break loop
 		case api.SQL_SUCCESS_WITH_INFO:
 			err := NewError("SQLGetData", h).(*Error)
-			if len(err.Diag) > 0 && err.Diag[0].State != "01004" {
-				return nil, err
+			if len(err.Diag) > 0 {
+				truncated := false
+				for _, diag := range err.Diag {
+					if diag.State == "01004" {
+						truncated = true
+						break
+					}
+				}
+				if !truncated {
+					return nil, err
+				}
 			}
 			i := len(b)
 			switch c.CType {
